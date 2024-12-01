@@ -1,12 +1,13 @@
 package mg.emberframework.manager.data;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ModelValidationExceptionHandler {
-    Map<String, List<Exception>> exceptions;
+    Map<String, List<Exception>> exceptions = new HashMap<>();
    
-    // Methods: addException(key, exc), 
+    // Methods: addException(key, exc), checkException()
 
     // Constructor
     public ModelValidationExceptionHandler() {}
