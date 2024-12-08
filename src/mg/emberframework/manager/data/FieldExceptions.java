@@ -1,10 +1,25 @@
 package mg.emberframework.manager.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class FieldExceptions {
-    private List<Exception> exceptions;
-    private String value;
+    private List<Exception> exceptions = new ArrayList<>();
+    private String value = "";
+
+    // Methods
+    public String getExceptionMessage() {
+        String message = "";
+        for (Exception exception: getExceptions()) {
+            message += exception.getMessage() + "\n";
+        }
+
+        return message;
+    }
+
+    public void addException(Exception exception) {
+        getExceptions().add(exception);
+    }
 
     // Constructor
     public FieldExceptions() {}
