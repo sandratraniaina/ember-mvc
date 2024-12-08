@@ -4,35 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelValidationExceptionHandler {
-    Map<String, Exception> exceptions = new HashMap<>();
-   
+    Map<String, FieldExceptions> fieldExceptions = new HashMap<>();
+
     // Methods
-    public String getExceptionMessage(String name) {
-        Exception exception = getExceptions().get(name);
-        return exception != null ? exception.getMessage() : "";
-    }
-
-    public boolean containsException() {
-        return getExceptions().size() > 0;
-    }
-
-    public void addException(String name, Exception exepctions) {
-        getExceptions().put(name, exepctions);
-    }
 
     // Constructor
     public ModelValidationExceptionHandler() {}
 
-    public ModelValidationExceptionHandler(Map<String, Exception> exepctions) {
-        setExceptions(exepctions);
+    public ModelValidationExceptionHandler(Map<String, FieldExceptions> exepctions) {
+        setFieldExceptions(exepctions);
     }
 
     // Getters and setters
-    public Map<String, Exception> getExceptions() {
-        return exceptions;
+    public Map<String, FieldExceptions> getFieldExceptions() {
+        return fieldExceptions;
     }
 
-    public void setExceptions(Map<String, Exception> exceptions) {
-        this.exceptions = exceptions;
+    public void setFieldExceptions(Map<String, FieldExceptions> fieldExceptions) {
+        this.fieldExceptions = fieldExceptions;
     }
 }
