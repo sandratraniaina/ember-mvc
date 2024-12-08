@@ -7,6 +7,19 @@ public class ModelValidationExceptionHandler {
     Map<String, FieldExceptions> fieldExceptions = new HashMap<>();
 
     // Methods
+    public void addException(String field, Exception exepction) {
+        FieldExceptions fieldExceptions = getFieldExceptions(field);
+        fieldExceptions.addException(exepction);
+    }
+
+    public FieldExceptions getFieldExceptions(String field) {
+        FieldExceptions fieldExceptions = getFieldExceptions().get(field);
+        if (fieldExceptions == null) {
+            fieldExceptions = new FieldExceptions();
+            getFieldExceptions().put(field, fieldExceptions);
+        }
+        return fieldExceptions;
+    }
 
     // Constructor
     public ModelValidationExceptionHandler() {}
