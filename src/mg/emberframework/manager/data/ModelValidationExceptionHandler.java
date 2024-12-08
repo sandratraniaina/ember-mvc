@@ -2,11 +2,25 @@ package mg.emberframework.manager.data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class ModelValidationExceptionHandler {
     Map<String, FieldExceptions> fieldExceptions = new HashMap<>();
 
     // Methods
+    public boolean containsException() {
+        FieldExceptions fieldExceptions = null;
+        
+        for(Entry<String, FieldExceptions> entry : getFieldExceptions().entrySet()) {
+            fieldExceptions = entry.getValue();
+            if (fieldExceptions.containsException()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public String getFieldExceptionMessage(String field) {
         FieldExceptions fieldExceptions = getFieldExceptions(field);
         return fieldExceptions.getExceptionMessage();

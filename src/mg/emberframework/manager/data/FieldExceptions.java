@@ -8,6 +8,10 @@ class FieldExceptions {
     private String value = "";
 
     // Methods
+    public boolean containsException() {
+        return  getExceptions().size() > 0;
+    }
+    
     public String getExceptionMessage() {
         String message = "";
         for (Exception exception: getExceptions()) {
