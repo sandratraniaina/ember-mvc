@@ -6,7 +6,7 @@ import java.util.Map;
 public class ModelValidationExceptionHandler {
     Map<String, Exception> exceptions = new HashMap<>();
    
-    // Methods: addException(key, exc), checkException()
+    // Methods
     public String getExceptionMessage(String name) {
         Exception exception = getExceptions().get(name);
         return exception != null ? exception.getMessage() : "";
