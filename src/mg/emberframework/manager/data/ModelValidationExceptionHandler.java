@@ -7,6 +7,10 @@ public class ModelValidationExceptionHandler {
     Map<String, Exception> exceptions = new HashMap<>();
    
     // Methods: addException(key, exc), checkException()
+    public boolean containsException() {
+        return getExceptions().size() > 0;
+    }
+
     public void addException(String name, Exception exepctions) {
         getExceptions().put(name, exepctions);
     }
