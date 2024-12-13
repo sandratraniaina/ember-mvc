@@ -9,7 +9,7 @@ class FieldExceptions {
 
     // Methods
     public boolean containsException() {
-        return  getExceptions().size() > 0;
+        return  !getExceptions().isEmpty();
     }
     
     public String getExceptionMessage() {
