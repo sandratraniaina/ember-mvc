@@ -25,8 +25,7 @@ public class ObjectUtils {
 
     public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
             Object object)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
-            NoSuchFieldException, IOException, ServletException, IllegalArgumentException, SecurityException,
+            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, ServletException, IllegalArgumentException, SecurityException,
             ModelValidationException {
         String strValue;
 
@@ -59,7 +58,7 @@ public class ObjectUtils {
     }
 
     private static void setObjectAttributesValues(Object instance, Field field, String value)
-            throws NoSuchFieldException, SecurityException, NoSuchMethodException, IllegalAccessException,
+            throws SecurityException, NoSuchMethodException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
 
         Object fieldValue = castObject(value, field.getType());
@@ -70,7 +69,7 @@ public class ObjectUtils {
 
     public static Object getObjectInstance(Class<?> classType, String annotationValue, HttpServletRequest request)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-            NoSuchMethodException, SecurityException, NoSuchFieldException, ModelValidationException {
+            NoSuchMethodException, SecurityException, ModelValidationException {
         Object instance = classType.getConstructor().newInstance();
         Field[] fields = classType.getDeclaredFields();
 
