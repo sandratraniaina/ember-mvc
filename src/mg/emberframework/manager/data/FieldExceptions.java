@@ -3,7 +3,7 @@ package mg.emberframework.manager.data;
 import java.util.ArrayList;
 import java.util.List;
 
-class FieldExceptions {
+public class FieldExceptions {
     private List<Exception> exceptions = new ArrayList<>();
     private String value = "";
 
