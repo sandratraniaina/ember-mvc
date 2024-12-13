@@ -9,11 +9,11 @@ public class ModelValidationExceptionHandler {
 
     // Methods
     public boolean containsException() {
-        FieldExceptions fieldExceptions = null;
+        FieldExceptions temp = null;
         
         for(Entry<String, FieldExceptions> entry : getFieldExceptions().entrySet()) {
-            fieldExceptions = entry.getValue();
-            if (fieldExceptions.containsException()) {
+            temp = entry.getValue();
+            if (temp.containsException()) {
                 return true;
             }
         }
@@ -22,22 +22,22 @@ public class ModelValidationExceptionHandler {
     }
 
     public String getFieldExceptionMessage(String field) {
-        FieldExceptions fieldExceptions = getFieldExceptions(field);
-        return fieldExceptions.getExceptionMessage();
+        FieldExceptions fieldExc = getFieldExceptions(field);
+        return fieldExc.getExceptionMessage();
     }
 
     public void addException(String field, Exception exepction) {
-        FieldExceptions fieldExceptions = getFieldExceptions(field);
-        fieldExceptions.addException(exepction);
+        FieldExceptions fieldExc = getFieldExceptions(field);
+        fieldExc.addException(exepction);
     }
 
     public FieldExceptions getFieldExceptions(String field) {
-        FieldExceptions fieldExceptions = getFieldExceptions().get(field);
-        if (fieldExceptions == null) {
-            fieldExceptions = new FieldExceptions();
-            getFieldExceptions().put(field, fieldExceptions);
+        FieldExceptions fieldExc = getFieldExceptions().get(field);
+        if (fieldExc == null) {
+            fieldExc = new FieldExceptions();
+            getFieldExceptions().put(field, fieldExc);
         }
-        return fieldExceptions;
+        return fieldExc;
     }
 
     // Constructor
