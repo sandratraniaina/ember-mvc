@@ -13,13 +13,13 @@ class FieldExceptions {
     }
     
     public String getExceptionMessage() {
-        String message = "";
-        for (Exception exception: getExceptions()) {
-            message += exception.getMessage() + "\n";
+        StringBuilder messageBuilder = new StringBuilder();
+        for (Exception exception : getExceptions()) {
+            messageBuilder.append(exception.getMessage()).append("\n");
         }
-
-        return message;
+        return messageBuilder.toString();
     }
+    
 
     public void addException(Exception exception) {
         getExceptions().add(exception);
