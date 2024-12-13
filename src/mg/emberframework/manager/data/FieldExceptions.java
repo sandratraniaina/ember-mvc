@@ -9,9 +9,9 @@ class FieldExceptions {
 
     // Methods
     public boolean containsException() {
-        return  !getExceptions().isEmpty();
+        return !getExceptions().isEmpty();
     }
-    
+
     public String getExceptionMessage() {
         StringBuilder messageBuilder = new StringBuilder();
         for (Exception exception : getExceptions()) {
@@ -19,14 +19,14 @@ class FieldExceptions {
         }
         return messageBuilder.toString();
     }
-    
 
     public void addException(Exception exception) {
         getExceptions().add(exception);
     }
 
     // Constructor
-    public FieldExceptions() {}
+    public FieldExceptions() {
+    }
 
     public FieldExceptions(List<Exception> exceptions, String value) {
         setExceptions(exceptions);
@@ -37,12 +37,15 @@ class FieldExceptions {
     public List<Exception> getExceptions() {
         return exceptions;
     }
+
     public void setExceptions(List<Exception> exceptions) {
         this.exceptions = exceptions;
     }
+
     public String getValue() {
         return value;
     }
+
     public void setValue(String value) {
         this.value = value;
     }
