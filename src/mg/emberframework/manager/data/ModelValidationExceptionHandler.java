@@ -10,8 +10,8 @@ public class ModelValidationExceptionHandler {
     // Methods
     public boolean containsException() {
         FieldExceptions temp = null;
-        
-        for(Entry<String, FieldExceptions> entry : getFieldExceptions().entrySet()) {
+
+        for (Entry<String, FieldExceptions> entry : getFieldExceptions().entrySet()) {
             temp = entry.getValue();
             if (temp.containsException()) {
                 return true;
@@ -41,7 +41,8 @@ public class ModelValidationExceptionHandler {
     }
 
     // Constructor
-    public ModelValidationExceptionHandler() {}
+    public ModelValidationExceptionHandler() {
+    }
 
     public ModelValidationExceptionHandler(Map<String, FieldExceptions> exepctions) {
         setFieldExceptions(exepctions);
