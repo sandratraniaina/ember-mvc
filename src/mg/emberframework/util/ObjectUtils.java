@@ -25,7 +25,8 @@ public class ObjectUtils {
 
     public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
             Object object)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException, ServletException, IllegalArgumentException, SecurityException,
+            throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
+            IOException, ServletException, IllegalArgumentException, SecurityException,
             ModelValidationException {
         String strValue;
 
@@ -49,10 +50,7 @@ public class ObjectUtils {
         } else if (clazz.equals(File.class)) {
             object = FileUtils.createRequestFile(annotationValue, request);
         } else {
-
-            if (parameter.isAnnotationPresent(RequestParameter.class)) {
-                object = ObjectUtils.getObjectInstance(clazz, annotationValue, request);
-            }
+            object = ObjectUtils.getObjectInstance(clazz, annotationValue, request);
         }
         return object;
     }
