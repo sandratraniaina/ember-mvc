@@ -44,7 +44,7 @@ public class MainProcess {
     }
 
     public static void handleRequest(FrontController controller, HttpServletRequest request,
-            HttpServletResponse response) throws IOException, UrlNotFoundException, ClassNotFoundException,
+            HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, NoSuchFieldException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
         PrintWriter out = response.getWriter();
