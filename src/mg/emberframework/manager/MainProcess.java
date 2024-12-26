@@ -76,13 +76,17 @@ public class MainProcess {
             ModelView modelView = ((ModelView) result);
             HashMap<String, Object> data = ((HashMap<String, Object>)modelView.getData());
 
-            for (Entry<String, Object> entry : data.entrySet()) {
-                request.setAttribute(entry.getKey(), entry.getValue());
-            }
+            setRequestAttributes(request, data);
 
             request.getRequestDispatcher(modelView.getUrl()).forward(request, response);
         } else {
             throw new IllegalReturnTypeException("Invalid return type");
+        }
+    }
+
+    private static void setRequestAttributes(HttpServletRequest request, HashMap<String, Object> data) {
+        for (Entry<String, Object> entry : data.entrySet()) {
+            request.setAttribute(entry.getKey(), entry.getValue());
         }
     }
 
