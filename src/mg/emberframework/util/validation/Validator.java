@@ -2,13 +2,16 @@ package mg.emberframework.util.validation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.manager.exception.ModelValidationException;
+import mg.emberframework.util.ObjectUtils;
 import mg.emberframework.util.validation.validator.FieldValidator;
-
+import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.FieldExceptions;
 import mg.emberframework.manager.data.ModelValidationExceptionHandler;
 
@@ -59,5 +62,20 @@ public class Validator {
                 handler.addFieldException(name, temp);
             }
         }
+    }
+
+    public static ModelValidationExceptionHandler validateMethod(Method method, HttpServletRequest request) {
+        ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
+
+        Parameter[] parameters = method.getParameters();
+
+        for(Parameter parameter : parameters) {
+            if (ObjectUtils.isClassModel(parameter.getType())) {
+                String identifier = parameter.getAnnotation(RequestParameter.class).value();
+                validateModel(parameter.getType() , identifier, handler, request);
+            }
+        }
+
+        return handler;
     }
 }
