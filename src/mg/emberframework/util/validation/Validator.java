@@ -49,8 +49,8 @@ public class Validator {
         return fieldExceptions;
     }
 
-    public static <T> void validateInstance(T instance, String identifier, ModelValidationExceptionHandler handler, HttpServletRequest request) {
-        Field[] fields = instance.getClass().getDeclaredFields();
+    public static <T> void validateModel(T model, String identifier, ModelValidationExceptionHandler handler, HttpServletRequest request) {
+        Field[] fields = model.getClass().getDeclaredFields();
 
         for (Field field : fields) {
             String name = identifier + "." + field.getName();
