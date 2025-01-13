@@ -31,6 +31,10 @@ public class ModelValidationExceptionHandler {
         fieldExc.addException(exepction);
     }
 
+    public void addFieldException(String field, FieldExceptions fieldExceptions) {
+        this.fieldExceptions.put(field, fieldExceptions);
+    }
+
     public FieldExceptions getFieldExceptions(String field) {
         FieldExceptions fieldExc = getFieldExceptions().get(field);
         if (fieldExc == null) {
