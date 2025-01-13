@@ -5,10 +5,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.manager.exception.ModelValidationException;
 import mg.emberframework.util.validation.validator.FieldValidator;
 
 import mg.emberframework.manager.data.FieldExceptions;
+import mg.emberframework.manager.data.ModelValidationExceptionHandler;
 
 public class Validator {
 
@@ -45,5 +47,17 @@ public class Validator {
         }
 
         return fieldExceptions;
+    }
+
+    public static <T> void validateInstance(T instance, String identifier, ModelValidationExceptionHandler handler, HttpServletRequest request) {
+        Field[] fields = instance.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            String name = identifier + "." + field.getName();
+            FieldExceptions temp = getModelFieldExceptions(request.getParameter(name), field);
+            if (temp.containsException()) {
+                handler.addFieldException(name, temp);
+            }
+        }
     }
 }
