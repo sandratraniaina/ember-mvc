@@ -16,8 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.File;
 import mg.emberframework.manager.data.Session;
-import mg.emberframework.manager.exception.ModelValidationException;
-import mg.emberframework.util.validation.Validator;
 
 public class ObjectUtils {
     private ObjectUtils() {
@@ -30,8 +28,7 @@ public class ObjectUtils {
     public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
             Object object)
             throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
-            IOException, ServletException, IllegalArgumentException, SecurityException,
-            ModelValidationException {
+            IOException, ServletException, IllegalArgumentException, SecurityException {
         String strValue;
 
         RequestParameter annotatedType = parameter.getAnnotation(RequestParameter.class);
@@ -71,7 +68,7 @@ public class ObjectUtils {
 
     public static Object getObjectInstance(Class<?> classType, String annotationValue, HttpServletRequest request)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-            NoSuchMethodException, SecurityException, ModelValidationException {
+            NoSuchMethodException, SecurityException {
         Object instance = classType.getConstructor().newInstance();
         Field[] fields = classType.getDeclaredFields();
 
@@ -83,9 +80,7 @@ public class ObjectUtils {
         for (Field field : fields) {
             paramName = className + field.getName();
             String value = request.getParameter(paramName);
-
-            Validator.checkField(value, field);
-
+            
             setObjectAttributesValues(instance, field, value);
         }
 
