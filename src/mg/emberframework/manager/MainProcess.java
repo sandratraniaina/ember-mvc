@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 
@@ -38,8 +37,8 @@ public class MainProcess {
     private static String handleRest(Object methodObject, HttpServletResponse response) {
         Gson gson = new Gson();
         String json = null;
-        if (methodObject instanceof ModelView) {
-            json = gson.toJson(((ModelView)methodObject).getData());
+        if (methodObject instanceof ModelView modelView) {
+            json = gson.toJson((modelView).getData());
         } else {
             json = gson.toJson(methodObject);
         }   
@@ -47,10 +46,14 @@ public class MainProcess {
         return json;
     }
 
+    private static void prepareRequest(HttpServletRequest request) {
+        request.setAttribute("error-handler", handler);
+    } 
+
     public static void handleRequest(FrontController controller, HttpServletRequest request,
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, NoSuchFieldException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
+            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
         PrintWriter out = response.getWriter();
         String verb = request.getMethod();
 
@@ -82,8 +85,7 @@ public class MainProcess {
 
         if (result instanceof String) {
             out.println(result.toString());
-        } else if (result instanceof ModelView) {
-            ModelView modelView = ((ModelView) result);
+        } else if (result instanceof ModelView modelView) {
             RedirectionHandler.redirect(request, response, modelView);
         } else {
             throw new IllegalReturnTypeException("Invalid return type");
