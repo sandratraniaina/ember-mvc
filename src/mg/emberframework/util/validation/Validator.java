@@ -35,7 +35,7 @@ public class Validator {
         List<Exception> exceptions = new ArrayList<>();
         FieldExceptions fieldExceptions = new FieldExceptions(exceptions, value);
 
-        Annotation[] annotations = field.getAnnotations();
+        Annotation[] annotations = field.getDeclaredAnnotations();
 
         for(Annotation annotation : annotations) {
             FieldValidator validator = ValidatorRegistry.getValidator(annotation.annotationType());
@@ -52,8 +52,8 @@ public class Validator {
         return fieldExceptions;
     }
 
-    public static <T> void validateModel(T model, String identifier, ModelValidationExceptionHandler handler, HttpServletRequest request) {
-        Field[] fields = model.getClass().getDeclaredFields();
+    public static void validateModel(Class<?> modelType, String identifier, ModelValidationExceptionHandler handler, HttpServletRequest request) {
+        Field[] fields = modelType.getDeclaredFields();
 
         for (Field field : fields) {
             String name = identifier + "." + field.getName();
