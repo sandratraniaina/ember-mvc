@@ -74,8 +74,14 @@ public class MainProcess {
 
         handler = Validator.validateMethod(verbMethod.getMethod(), request);
 
+        prepareRequest(request);
+
         if (handler.containsException()) {
-            // Handle error
+            ModelView modelView = new ModelView();
+            modelView.setRedirect(true);
+            modelView.setUrl(RequestUtil.getRequestRefererUrl(request));
+            request = RequestUtil.generateHttpServletRequest(request, "GET");
+            RedirectionHandler.redirect(request, response, modelView);
         }
         
         Object result = ReflectUtils.executeRequestMethod(mapping, request, verb);
