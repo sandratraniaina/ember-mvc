@@ -77,6 +77,7 @@ public class MainProcess {
         prepareRequest(request);
 
         if (handler.containsException()) {
+            // TODO: Use session for error handling
             ModelView modelView = new ModelView();
             modelView.setRedirect(true);
             modelView.setUrl(RequestUtil.getRequestRefererUrl(request));
