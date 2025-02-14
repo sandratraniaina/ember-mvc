@@ -74,14 +74,13 @@ public class MainProcess {
 
         handler = Validator.validateMethod(verbMethod.getMethod(), request);
 
-        prepareRequest(request);
-
+        
         if (handler.containsException()) {
-            // TODO: Use session for error handling
             ModelView modelView = new ModelView();
             modelView.setRedirect(true);
             modelView.setUrl(RequestUtil.getRequestRefererUrl(request));
             request = RequestUtil.generateHttpServletRequest(request, "GET");
+            prepareRequest(request);
             RedirectionHandler.redirect(request, response, modelView);
         }
         
