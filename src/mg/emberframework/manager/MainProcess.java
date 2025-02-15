@@ -67,7 +67,7 @@ public class MainProcess {
         Mapping mapping = frontController.getURLMapping().get(url);
         
         if (mapping == null) {
-            throw new UrlNotFoundException("Oops, url not found!");
+            throw new UrlNotFoundException("Oops, url not found!(" + url + ")");
         }
         
         VerbMethod verbMethod = mapping.getSpecificVerbMethod(verb);
