@@ -77,7 +77,7 @@ public class MainProcess {
         
         if (handler.containsException()) {
             ModelView modelView = new ModelView();
-            modelView.setRedirect(true);
+            modelView.setRedirect(false);
             modelView.setUrl(RequestUtil.getRequestRefererUrl(request));
             request = RequestUtil.generateHttpServletRequest(request, "GET");
             prepareRequest(request);
