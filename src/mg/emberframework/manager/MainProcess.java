@@ -3,6 +3,7 @@ package mg.emberframework.manager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import mg.emberframework.manager.url.Mapping;
 import mg.emberframework.util.PackageScanner;
 import mg.emberframework.util.ReflectUtils;
 import mg.emberframework.util.RequestUtil;
+import mg.emberframework.util.UrlParser;
 import mg.emberframework.util.validation.Validator;
 
 public class MainProcess {
@@ -54,7 +56,7 @@ public class MainProcess {
     public static void handleRequest(FrontController controller, HttpServletRequest request,
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
+            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException, URISyntaxException {
         PrintWriter out = response.getWriter();
         String verb = request.getMethod();
 
@@ -73,12 +75,11 @@ public class MainProcess {
         VerbMethod verbMethod = mapping.getSpecificVerbMethod(verb);
 
         handler = Validator.validateMethod(verbMethod.getMethod(), request);
-
         
         if (handler.containsException()) {
             ModelView modelView = new ModelView();
             modelView.setRedirect(false);
-            modelView.setUrl(RequestUtil.getRequestRefererUrl(request));
+            modelView.setUrl(UrlParser.getRoute(RequestUtil.getRequestRefererUrl(request)));
             request = RequestUtil.generateHttpServletRequest(request, "GET");
             prepareRequest(request);
             RedirectionHandler.redirect(request, response, modelView);
