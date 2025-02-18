@@ -13,9 +13,13 @@ public class FieldExceptions {
     }
 
     public String getExceptionMessage() {
+        return getExceptionMessage("\n");
+    }
+
+    public String getExceptionMessage(String separator) {
         StringBuilder messageBuilder = new StringBuilder();
         for (Exception exception : getExceptions()) {
-            messageBuilder.append(exception.getMessage()).append("\n");
+            messageBuilder.append(exception.getMessage()).append(separator);
         }
         return messageBuilder.toString();
     }
