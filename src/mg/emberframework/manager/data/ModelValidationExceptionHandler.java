@@ -26,6 +26,11 @@ public class ModelValidationExceptionHandler {
         return fieldExc.getExceptionMessage();
     }
 
+    public String getFieldExceptionMessage(String field, String separator) {
+        FieldExceptions fieldExc = getFieldExceptions(field);
+        return fieldExc.getExceptionMessage(separator);
+    }
+
     public String getFieldExceptionValue(String field) {
         FieldExceptions fieldExc = getFieldExceptions(field);
         return fieldExc.getValue();
