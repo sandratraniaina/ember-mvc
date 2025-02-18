@@ -58,9 +58,7 @@ public class Validator {
         for (Field field : fields) {
             String name = identifier + "." + field.getName();
             FieldExceptions temp = getModelFieldExceptions(request.getParameter(name), field);
-            if (temp.containsException()) {
-                handler.addFieldException(name, temp);
-            }
+            handler.addFieldException(name, temp);
         }
     }
 
