@@ -11,7 +11,7 @@ public class LengthValidator implements FieldValidator {
     @Override
     public void validate(String value, Annotation annotation, Field field) throws ModelValidationException {
         int minLength = ((Length) annotation).length();
-        if (((String) value).length() < minLength) {
+        if ((value).length() < minLength) {
             throw new ModelValidationException(field.getName() + " must have at least " + minLength + " characters.");
         }
     }
