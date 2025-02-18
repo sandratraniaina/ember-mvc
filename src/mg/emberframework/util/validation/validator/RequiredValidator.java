@@ -10,7 +10,7 @@ public class RequiredValidator implements FieldValidator{
     @Override
     public void validate(String value, Annotation annotation, Field field) throws ModelValidationException {
         if (value == null || "".equals(value)) {
-            throw new ModelValidationException(field.getName() + "is Required");
+            throw new ModelValidationException(field.getName() + " is required");
         }
     }
     
