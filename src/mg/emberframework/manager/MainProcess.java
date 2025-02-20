@@ -111,11 +111,13 @@ public class MainProcess {
         frontController = controller;
 
         String packageName = controller.getInitParameter("package_name");
+        String errorParamName = controller.getInitParameter("error_param_name");
 
         HashMap<String, Mapping> urlMappings;
         urlMappings = (HashMap<String, Mapping>) PackageScanner.scanPackage(packageName);
 
         controller.setURLMapping(urlMappings);
+        controller.setErrorParamName(errorParamName);
     }
 
     // Getters and setters
