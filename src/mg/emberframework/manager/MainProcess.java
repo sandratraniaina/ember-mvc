@@ -86,7 +86,7 @@ public class MainProcess {
             modelView.setRedirect(false);
             modelView.setUrl(UrlParser.getRoute(RequestUtil.getRequestRefererUrl(request)));
             request = RequestUtil.generateHttpServletRequest(request, "GET");
-            request.setAttribute("error-handler", handler);
+            request.setAttribute(controller.getErrorParamName(), handler);
             RedirectionHandler.redirect(request, response, modelView);
         } else {
             Object result = ReflectUtils.executeRequestMethod(mapping, request, verb);
