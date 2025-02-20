@@ -21,6 +21,7 @@ import mg.emberframework.manager.url.Mapping;
 public class FrontController extends HttpServlet {
     private Map<String, Mapping> URLMappings;
     private Exception exception = null;
+    private String errorParamName;
 
     // Class methods
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -89,5 +90,16 @@ public class FrontController extends HttpServlet {
 
     public void setException(Exception exception) {
         this.exception = exception;
+    }
+
+    public String getErrorParamName() {
+        return errorParamName;
+    }
+
+    public void setErrorParamName(String errorParamName) {
+        if (errorParamName == null) {
+            errorParamName = "errors";
+        }
+        this.errorParamName = errorParamName;
     }
 }
