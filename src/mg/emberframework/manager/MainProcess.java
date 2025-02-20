@@ -35,7 +35,7 @@ import mg.emberframework.util.validation.Validator;
 public class MainProcess {
     static FrontController frontController;
     private List<Exception> exceptions;
-    private static ModelValidationExceptionHandler handler;
+    private static ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
 
     private static String handleRest(Object methodObject, HttpServletResponse response) {
         Gson gson = new Gson();
@@ -50,7 +50,10 @@ public class MainProcess {
     }
 
     private static void prepareRequest(HttpServletRequest request) {
-        request.setAttribute("error-handler", handler);
+        if (handler == null) handler = new ModelValidationExceptionHandler();
+        if (request.getAttribute("error-handler") == null) {
+            request.setAttribute("error-handler", handler);
+        }
     } 
 
     public static void handleRequest(FrontController controller, HttpServletRequest request,
@@ -76,28 +79,31 @@ public class MainProcess {
 
         handler = Validator.validateMethod(verbMethod.getMethod(), request);
         
+        prepareRequest(request);
+
         if (handler.containsException()) {
             ModelView modelView = new ModelView();
             modelView.setRedirect(false);
             modelView.setUrl(UrlParser.getRoute(RequestUtil.getRequestRefererUrl(request)));
             request = RequestUtil.generateHttpServletRequest(request, "GET");
-            prepareRequest(request);
-            RedirectionHandler.redirect(request, response, modelView);
-        }
-        
-        Object result = ReflectUtils.executeRequestMethod(mapping, request, verb);
-
-        if (verbMethod.isRestAPI()) {
-            result = handleRest(result, response);
-        }   
-
-        if (result instanceof String) {
-            out.println(result.toString());
-        } else if (result instanceof ModelView modelView) {
+            request.setAttribute("error-handler", handler);
             RedirectionHandler.redirect(request, response, modelView);
         } else {
-            throw new IllegalReturnTypeException("Invalid return type");
+            Object result = ReflectUtils.executeRequestMethod(mapping, request, verb);
+    
+            if (verbMethod.isRestAPI()) {
+                result = handleRest(result, response);
+            }   
+    
+            if (result instanceof String) {
+                out.println(result.toString());
+            } else if (result instanceof ModelView modelView) {
+                RedirectionHandler.redirect(request, response, modelView);
+            } else {
+                throw new IllegalReturnTypeException("Invalid return type");
+            }
         }
+        
     }
 
     public static void init(FrontController controller)
