@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mg.emberframework.controller.FrontController;
+import mg.emberframework.manager.data.InitParameter;
 import mg.emberframework.manager.data.ModelValidationExceptionHandler;
 import mg.emberframework.manager.data.ModelView;
 import mg.emberframework.manager.data.VerbMethod;
@@ -29,7 +30,6 @@ import mg.emberframework.manager.url.Mapping;
 import mg.emberframework.util.PackageScanner;
 import mg.emberframework.util.ReflectUtils;
 import mg.emberframework.util.RequestUtil;
-import mg.emberframework.util.UrlParser;
 import mg.emberframework.util.validation.Validator;
 
 public class MainProcess {
@@ -84,9 +84,9 @@ public class MainProcess {
         if (handler.containsException()) {
             ModelView modelView = new ModelView();
             modelView.setRedirect(false);
-            modelView.setUrl(UrlParser.getRoute(RequestUtil.getRequestRefererUrl(request)));
+            modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
             request = RequestUtil.generateHttpServletRequest(request, "GET");
-            request.setAttribute(controller.getErrorParamName(), handler);
+            request.setAttribute(controller.getInitParameter().getErrorParamName(), handler);
             RedirectionHandler.redirect(request, response, modelView);
         } else {
             Object result = ReflectUtils.executeRequestMethod(mapping, request, verb);
@@ -112,12 +112,13 @@ public class MainProcess {
 
         String packageName = controller.getInitParameter("package_name");
         String errorParamName = controller.getInitParameter("error_param_name");
+        String errorRedirectionParamName = controller.getInitParameter("error_redirection_param_name");
 
         HashMap<String, Mapping> urlMappings;
         urlMappings = (HashMap<String, Mapping>) PackageScanner.scanPackage(packageName);
 
         controller.setURLMapping(urlMappings);
-        controller.setErrorParamName(errorParamName);
+        controller.setInitParameter(new InitParameter(errorParamName, packageName, errorRedirectionParamName));
     }
 
     // Getters and setters
