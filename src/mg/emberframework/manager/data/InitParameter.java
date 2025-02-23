@@ -6,13 +6,13 @@ public class InitParameter {
     private String errorRedirectionParamName;
 
     public InitParameter() {
-        
+
     }
-    
+
     public InitParameter(String errorParamName, String controllerPackageName, String errorRedirectionParamName) {
-        this.errorParamName = errorParamName;
-        this.controllerPackageName = controllerPackageName;
-        this.errorRedirectionParamName = errorRedirectionParamName;
+        setErrorParamName(errorParamName);
+        setControllerPackageName(controllerPackageName);
+        setErrorRedirectionParamName(errorRedirectionParamName);
     }
 
     public String getErrorParamName() {
@@ -20,6 +20,9 @@ public class InitParameter {
     }
 
     public void setErrorParamName(String errorParamName) {
+        if (errorParamName == null) {
+            errorParamName = "errors";
+        }
         this.errorParamName = errorParamName;
     }
 
@@ -28,6 +31,9 @@ public class InitParameter {
     }
 
     public void setControllerPackageName(String controllerPackageName) {
+        if (controllerPackageName == null) {
+            controllerPackageName = "controllers";
+        }
         this.controllerPackageName = controllerPackageName;
     }
 
@@ -36,6 +42,9 @@ public class InitParameter {
     }
 
     public void setErrorRedirectionParamName(String errorRedirectionParamName) {
+        if (errorRedirectionParamName == null) {
+            errorRedirectionParamName = "error-url";
+        }
         this.errorRedirectionParamName = errorRedirectionParamName;
     }
 }
