@@ -43,22 +43,24 @@ public class MainProcess {
             json = gson.toJson((modelView).getData());
         } else {
             json = gson.toJson(methodObject);
-        }   
+        }
         response.setContentType("application/json");
         return json;
     }
 
     private static void prepareRequest(HttpServletRequest request) {
-        if (handler == null) handler = new ModelValidationExceptionHandler();
+        if (handler == null)
+            handler = new ModelValidationExceptionHandler();
         if (request.getAttribute("error-handler") == null) {
             request.setAttribute("error-handler", handler);
         }
-    } 
+    }
 
     public static void handleRequest(FrontController controller, HttpServletRequest request,
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
+            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException,
+            AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
         PrintWriter out = response.getWriter();
         String verb = request.getMethod();
 
@@ -69,40 +71,43 @@ public class MainProcess {
 
         String url = request.getRequestURI().substring(request.getContextPath().length());
         Mapping mapping = frontController.getURLMapping().get(url);
-        
+
         if (mapping == null) {
             throw new UrlNotFoundException("Oops, url not found!(" + url + ")");
         }
-        
+
         VerbMethod verbMethod = mapping.getSpecificVerbMethod(verb);
 
         handler = Validator.validateMethod(verbMethod.getMethod(), request);
-        
-        prepareRequest(request);
+
+        Object result;
 
         if (handler.containsException()) {
             ModelView modelView = new ModelView();
             modelView.setRedirect(false);
             modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
+            
             request = RequestUtil.generateHttpServletRequest(request, "GET");
-            request.setAttribute(controller.getInitParameter().getErrorParamName(), handler);
+
+            result = modelView;
+        } else {
+            result = ReflectUtils.executeRequestMethod(mapping, request, verb);
+        }
+
+        prepareRequest(request);
+
+        if (verbMethod.isRestAPI()) {
+            result = handleRest(result, response);
+        }
+
+        if (result instanceof String) {
+            out.println(result.toString());
+        } else if (result instanceof ModelView modelView) {
             RedirectionHandler.redirect(request, response, modelView);
         } else {
-            Object result = ReflectUtils.executeRequestMethod(mapping, request, verb);
-    
-            if (verbMethod.isRestAPI()) {
-                result = handleRest(result, response);
-            }   
-    
-            if (result instanceof String) {
-                out.println(result.toString());
-            } else if (result instanceof ModelView modelView) {
-                RedirectionHandler.redirect(request, response, modelView);
-            } else {
-                throw new IllegalReturnTypeException("Invalid return type");
-            }
+            throw new IllegalReturnTypeException("Invalid return type");
         }
-        
+
     }
 
     public static void init(FrontController controller)
