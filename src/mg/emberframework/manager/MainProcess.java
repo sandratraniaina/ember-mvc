@@ -3,7 +3,6 @@ package mg.emberframework.manager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,7 +58,7 @@ public class MainProcess {
     public static void handleRequest(FrontController controller, HttpServletRequest request,
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException, URISyntaxException {
+            InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException, AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
         PrintWriter out = response.getWriter();
         String verb = request.getMethod();
 
