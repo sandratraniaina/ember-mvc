@@ -89,6 +89,10 @@ public class MainProcess {
             
             request = RequestUtil.generateHttpServletRequest(request, "GET");
 
+            if (verbMethod.isRestAPI()) {
+                modelView.addObject(controller.getInitParameter().getErrorParamName(), handler);
+            }
+
             result = modelView;
         } else {
             result = ReflectUtils.executeRequestMethod(mapping, request, verb);
