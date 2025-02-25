@@ -48,11 +48,11 @@ public class MainProcess {
         return json;
     }
 
-    private static void prepareRequest(HttpServletRequest request) {
+    private static void prepareRequest(FrontController controller, HttpServletRequest request) {
         if (handler == null)
             handler = new ModelValidationExceptionHandler();
-        if (request.getAttribute("error-handler") == null) {
-            request.setAttribute("error-handler", handler);
+        if (request.getAttribute(controller.getInitParameter().getErrorParamName()) == null) {
+            request.setAttribute(controller.getInitParameter().getErrorParamName(), handler);
         }
     }
 
@@ -98,7 +98,7 @@ public class MainProcess {
             result = ReflectUtils.executeRequestMethod(mapping, request, verb);
         }
 
-        prepareRequest(request);
+        prepareRequest(controller, request);
 
         if (verbMethod.isRestAPI()) {
             result = handleRest(result, response);
