@@ -51,7 +51,7 @@ public class ReflectUtils {
 
     public static Object executeRequestMethod(Mapping mapping, HttpServletRequest request, String verb)
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException, InstantiationException, ClassNotFoundException, NoSuchFieldException,
+            InvocationTargetException, InstantiationException,
             AnnotationNotPresentException, InvalidRequestException, IOException, ServletException, ModelValidationException {
         List<Object> objects = new ArrayList<>();
 
@@ -73,8 +73,6 @@ public class ReflectUtils {
 
             objects.add(object);
         }
-
-        //TODO: Check all object before executing method
 
         return executeMethod(requestObject, method.getName(), objects.toArray());
     }

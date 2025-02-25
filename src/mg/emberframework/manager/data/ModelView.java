@@ -6,6 +6,7 @@ import java.util.Map;
 public class ModelView {
     String url;
     Map<String, Object> data = new HashMap<>();
+    boolean redirect = false;
 
     // Class method
     public void addObject(String attribute, Object object) {
@@ -33,5 +34,13 @@ public class ModelView {
     }
     public void setData(Map<String, Object> data) {
         this.data = data;
+    }
+
+    public boolean isRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(boolean redirect) {
+        this.redirect = redirect;
     }
 }
