@@ -3,6 +3,7 @@ package mg.emberframework.manager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import mg.emberframework.annotation.RequiredRole;
 import mg.emberframework.controller.FrontController;
 import mg.emberframework.manager.data.InitParameter;
 import mg.emberframework.manager.data.ModelValidationExceptionHandler;
@@ -22,6 +25,7 @@ import mg.emberframework.manager.exception.IllegalReturnTypeException;
 import mg.emberframework.manager.exception.InvalidControllerPackageException;
 import mg.emberframework.manager.exception.InvalidRequestException;
 import mg.emberframework.manager.exception.ModelValidationException;
+import mg.emberframework.manager.exception.UnauthorizedAccessException;
 import mg.emberframework.manager.exception.UrlNotFoundException;
 import mg.emberframework.manager.handler.ExceptionHandler;
 import mg.emberframework.manager.handler.RedirectionHandler;
@@ -35,6 +39,41 @@ public class MainProcess {
     static FrontController frontController;
     private List<Exception> exceptions;
     private static ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
+    
+    private static final String DEFAULT_ROLE_ATTRIBUTE = frontController.getInitParameter().getRoleAttributeName();
+
+    private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
+            throws UnauthorizedAccessException {
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            throw new UnauthorizedAccessException("No active session found");
+        }
+
+        Object role = session.getAttribute(DEFAULT_ROLE_ATTRIBUTE);
+
+        if (role == null) {
+            throw new UnauthorizedAccessException("No role defined in session");
+        }
+
+        String roleStr = role.toString();
+        RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
+        if (requiredRole != null) {
+            String[] allowedRoles = requiredRole.values();
+            boolean hasRequiredRole = false;
+            for (String allowed : allowedRoles) {
+                if (allowed.equalsIgnoreCase(roleStr)) {
+                    hasRequiredRole = true;
+                    break;
+                }
+            }
+            if (!hasRequiredRole) {
+                throw new UnauthorizedAccessException(
+                        "Required role not found. Required: " + Arrays.toString(allowedRoles));
+            }
+        }
+    }
 
     private static String handleRest(Object methodObject, HttpServletResponse response) {
         Gson gson = new Gson();
@@ -86,7 +125,7 @@ public class MainProcess {
             ModelView modelView = new ModelView();
             modelView.setRedirect(false);
             modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
-            
+
             request = RequestUtil.generateHttpServletRequest(request, "GET");
 
             if (verbMethod.isRestAPI()) {
