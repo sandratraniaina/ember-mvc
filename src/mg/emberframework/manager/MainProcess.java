@@ -39,7 +39,7 @@ public class MainProcess {
     static FrontController frontController;
     private List<Exception> exceptions;
     private static ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
-    
+
     private static String defaultRoleAttribute;
 
     private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
@@ -47,19 +47,19 @@ public class MainProcess {
 
         RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
         if (requiredRole != null) {
-        HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            throw new UnauthorizedAccessException("No active session found");
-        }
+            if (session == null) {
+                throw new UnauthorizedAccessException("No active session found");
+            }
 
             Object role = session.getAttribute(defaultRoleAttribute);
 
-        if (role == null) {
-            throw new UnauthorizedAccessException("No role defined in session");
-        }
+            if (role == null) {
+                throw new UnauthorizedAccessException("No role defined in session");
+            }
 
-        String roleStr = role.toString();
+            String roleStr = role.toString();
             String[] allowedRoles = requiredRole.values();
             boolean hasRequiredRole = false;
             for (String allowed : allowedRoles) {
@@ -117,6 +117,8 @@ public class MainProcess {
         }
 
         VerbMethod verbMethod = mapping.getSpecificVerbMethod(verb);
+
+        checkUserRole(request, verbMethod);
 
         handler = Validator.validateMethod(verbMethod.getMethod(), request);
 
