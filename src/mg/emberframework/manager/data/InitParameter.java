@@ -4,6 +4,7 @@ public class InitParameter {
     private String errorParamName;
     private String controllerPackageName;
     private String errorRedirectionParamName;
+    private String roleAttributeName;
 
     public InitParameter() {
 
@@ -46,5 +47,13 @@ public class InitParameter {
             errorRedirectionParamName = "error-url";
         }
         this.errorRedirectionParamName = errorRedirectionParamName;
+    }
+
+    public String getRoleAttributeName() {
+        return roleAttributeName;
+    }
+
+    public void setRoleAttributeName(String roleAttributeName) {
+        this.roleAttributeName = roleAttributeName;
     }
 }
