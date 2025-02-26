@@ -40,7 +40,7 @@ public class MainProcess {
     private List<Exception> exceptions;
     private static ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
     
-    private static final String DEFAULT_ROLE_ATTRIBUTE = frontController.getInitParameter().getRoleAttributeName();
+    private static String defaultRoleAttribute;
 
     private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
@@ -51,7 +51,7 @@ public class MainProcess {
             throw new UnauthorizedAccessException("No active session found");
         }
 
-        Object role = session.getAttribute(DEFAULT_ROLE_ATTRIBUTE);
+            Object role = session.getAttribute(defaultRoleAttribute);
 
         if (role == null) {
             throw new UnauthorizedAccessException("No role defined in session");
