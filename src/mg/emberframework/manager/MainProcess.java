@@ -45,6 +45,8 @@ public class MainProcess {
     private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
 
+        RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
+        if (requiredRole != null) {
         HttpSession session = request.getSession(false);
 
         if (session == null) {
@@ -58,8 +60,6 @@ public class MainProcess {
         }
 
         String roleStr = role.toString();
-        RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
-        if (requiredRole != null) {
             String[] allowedRoles = requiredRole.values();
             boolean hasRequiredRole = false;
             for (String allowed : allowedRoles) {
