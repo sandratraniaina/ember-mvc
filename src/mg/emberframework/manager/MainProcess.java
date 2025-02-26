@@ -99,7 +99,8 @@ public class MainProcess {
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException,
-            AnnotationNotPresentException, InvalidRequestException, ModelValidationException {
+            AnnotationNotPresentException, InvalidRequestException, ModelValidationException,
+            UnauthorizedAccessException {
         PrintWriter out = response.getWriter();
         String verb = request.getMethod();
 
