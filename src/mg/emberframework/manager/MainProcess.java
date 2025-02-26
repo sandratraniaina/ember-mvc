@@ -160,12 +160,18 @@ public class MainProcess {
         String packageName = controller.getInitParameter("package_name");
         String errorParamName = controller.getInitParameter("error_param_name");
         String errorRedirectionParamName = controller.getInitParameter("error_redirection_param_name");
+        String roleAttributeName = controller.getInitParameter("role_attribute_name");
 
         HashMap<String, Mapping> urlMappings;
         urlMappings = (HashMap<String, Mapping>) PackageScanner.scanPackage(packageName);
 
+        InitParameter initParameter = new InitParameter(errorParamName, packageName, errorRedirectionParamName,
+                roleAttributeName);
+
+        defaultRoleAttribute = initParameter.getRoleAttributeName();
+
         controller.setURLMapping(urlMappings);
-        controller.setInitParameter(new InitParameter(errorParamName, packageName, errorRedirectionParamName));
+        controller.setInitParameter(initParameter);
     }
 
     // Getters and setters
