@@ -10,10 +10,11 @@ public class InitParameter {
 
     }
 
-    public InitParameter(String errorParamName, String controllerPackageName, String errorRedirectionParamName) {
+    public InitParameter(String errorParamName, String controllerPackageName, String errorRedirectionParamName, String roleAttributeName) {
         setErrorParamName(errorParamName);
         setControllerPackageName(controllerPackageName);
         setErrorRedirectionParamName(errorRedirectionParamName);
+        setRoleAttributeName(roleAttributeName);
     }
 
     public String getErrorParamName() {
@@ -54,6 +55,9 @@ public class InitParameter {
     }
 
     public void setRoleAttributeName(String roleAttributeName) {
+        if (roleAttributeName == null) {
+            roleAttributeName = "role";
+        }
         this.roleAttributeName = roleAttributeName;
     }
 }
