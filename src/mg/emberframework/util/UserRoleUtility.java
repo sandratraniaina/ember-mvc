@@ -12,6 +12,10 @@ import mg.emberframework.manager.exception.UnauthorizedAccessException;
 public class UserRoleUtility {
     private String defaultRoleAttribute;
 
+    public UserRoleUtility(String roleAttribute) {
+        setDefaultRoleAttribute(roleAttribute);
+    }
+
     public  boolean hasRequiredRole(String userRole, String[] requiredRoles) {
         if (userRole == null || requiredRoles == null || requiredRoles.length == 0) {
             return false;
@@ -70,5 +74,14 @@ public class UserRoleUtility {
                                 ", Found: " + userRole);
             }
         }
+    }
+
+    // Getters and setters
+    public String getDefaultRoleAttribute() {
+        return defaultRoleAttribute;
+    }
+
+    public void setDefaultRoleAttribute(String defaultRoleAttribute) {
+        this.defaultRoleAttribute = defaultRoleAttribute;
     }
 }
