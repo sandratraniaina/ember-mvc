@@ -12,8 +12,8 @@ public class VerbMethod {
 
     // Method
     public boolean isRequestValid(HttpServletRequest request) {
-        String method = request.getMethod();
-        return getVerb().equalsIgnoreCase(method);
+        String requestMethod = request.getMethod();
+        return getVerb().equalsIgnoreCase(requestMethod);
     }
 
     public boolean isRestAPI() {
