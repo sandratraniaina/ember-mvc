@@ -4,15 +4,17 @@ public class InitParameter {
     private String errorParamName;
     private String controllerPackageName;
     private String errorRedirectionParamName;
+    private String roleAttributeName;
 
     public InitParameter() {
 
     }
 
-    public InitParameter(String errorParamName, String controllerPackageName, String errorRedirectionParamName) {
+    public InitParameter(String errorParamName, String controllerPackageName, String errorRedirectionParamName, String roleAttributeName) {
         setErrorParamName(errorParamName);
         setControllerPackageName(controllerPackageName);
         setErrorRedirectionParamName(errorRedirectionParamName);
+        setRoleAttributeName(roleAttributeName);
     }
 
     public String getErrorParamName() {
@@ -46,5 +48,16 @@ public class InitParameter {
             errorRedirectionParamName = "error-url";
         }
         this.errorRedirectionParamName = errorRedirectionParamName;
+    }
+
+    public String getRoleAttributeName() {
+        return roleAttributeName;
+    }
+
+    public void setRoleAttributeName(String roleAttributeName) {
+        if (roleAttributeName == null) {
+            roleAttributeName = "role";
+        }
+        this.roleAttributeName = roleAttributeName;
     }
 }
