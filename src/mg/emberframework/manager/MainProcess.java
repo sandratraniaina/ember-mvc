@@ -42,24 +42,27 @@ public class MainProcess {
 
     private static String defaultRoleAttribute;
 
+    private static String getUserRoleFromSession(HttpServletRequest request)
+            throws UnauthorizedAccessException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new UnauthorizedAccessException("No active session found");
+        }
+
+        Object role = session.getAttribute(defaultRoleAttribute);
+        if (role == null) {
+            throw new UnauthorizedAccessException("No role defined in session");
+        }
+
+        return role.toString();
+    }
+
     private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
 
         RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
         if (requiredRole != null) {
-            HttpSession session = request.getSession(false);
-
-            if (session == null) {
-                throw new UnauthorizedAccessException("No active session found");
-            }
-
-            Object role = session.getAttribute(defaultRoleAttribute);
-
-            if (role == null) {
-                throw new UnauthorizedAccessException("No role defined in session");
-            }
-
-            String roleStr = role.toString();
+            String roleStr = getUserRoleFromSession(request);
             String[] allowedRoles = requiredRole.values();
             boolean hasRequiredRole = false;
             for (String allowed : allowedRoles) {
