@@ -49,4 +49,28 @@ public class ClassUtils {
         // Return null for any class not explicitly mapped
         return defaultValue;
     }
+
+    public static boolean isPrimitive(Class<?> clazz) {
+        // String is not actually a primitive type in Java
+        if (clazz == null) {
+            return false;
+        }
+
+        // Use the built-in isPrimitive() method for actual primitive checks
+        if (clazz.isPrimitive()) {
+            return true;
+        }
+
+        // If you want to include String and wrapper classes as "primitives" for your
+        // application logic:
+        return clazz == String.class ||
+                clazz == Boolean.class ||
+                clazz == Character.class ||
+                clazz == Byte.class ||
+                clazz == Short.class ||
+                clazz == Integer.class ||
+                clazz == Long.class ||
+                clazz == Float.class ||
+                clazz == Double.class;
+    }
 }
