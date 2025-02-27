@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.sql.Date;
-import java.time.LocalDate;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,12 +29,12 @@ public class ObjectUtils {
 
             if (parameter.isAnnotationPresent(RequestParameter.class)) {
                 strValue = request.getParameter(annotationValue);
-                object = strValue != null ? ObjectUtils.castObject(strValue, clazz) : object;
+                object = strValue != null ? ObjectConverter.castObject(strValue, clazz) : object;
             } else {
                 String paramName = parameter.getName();
                 strValue = request.getParameter(paramName);
                 if (strValue != null) {
-                    object = ObjectUtils.castObject(strValue, clazz);
+                    object = ObjectConverter.castObject(strValue, clazz);
                 }
             }
         } else if (clazz.equals(Session.class)) {
@@ -53,7 +51,7 @@ public class ObjectUtils {
             throws SecurityException, NoSuchMethodException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
 
-        Object fieldValue = castObject(value, field.getType());
+        Object fieldValue = ObjectConverter.castObject(value, field.getType());
         String setterMethodName = ReflectUtils.getSetterMethod(field.getName());
         Method method = instance.getClass().getMethod(setterMethodName, field.getType());
         method.invoke(instance, fieldValue);
@@ -78,21 +76,5 @@ public class ObjectUtils {
         }
 
         return instance;
-    }
-
-    public static Object castObject(String value, Class<?> clazz) {
-        if (value == null) {
-            return null;
-        } else if (clazz == Integer.TYPE) {
-            return Integer.parseInt(value);
-        } else if (clazz == Double.TYPE) {
-            return Double.parseDouble(value);
-        } else if (clazz == Float.TYPE) {
-            return Float.parseFloat(value);
-        } else if (clazz == Date.class) {
-            return Date.valueOf(LocalDate.parse(value));
-        } else {
-            return value;
-        }
     }
 }
