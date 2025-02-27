@@ -18,10 +18,6 @@ public class ObjectUtils {
     private ObjectUtils() {
     }
 
-    public static boolean isClassModel(Class<?> type) {
-        return !ClassUtils.isPrimitive(type) && !type.equals(Session.class) && !type.equals(File.class);
-    }
-
     public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
             Object object)
             throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,

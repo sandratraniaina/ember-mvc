@@ -9,7 +9,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.manager.exception.ModelValidationException;
-import mg.emberframework.util.ObjectUtils;
+import mg.emberframework.util.ClassUtils;
 import mg.emberframework.util.validation.validator.FieldValidator;
 import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.FieldExceptions;
@@ -68,7 +68,7 @@ public class Validator {
         Parameter[] parameters = method.getParameters();
 
         for(Parameter parameter : parameters) {
-            if (ObjectUtils.isClassModel(parameter.getType())) {
+            if (ClassUtils.isClassModel(parameter.getType())) {
                 String identifier = parameter.getAnnotation(RequestParameter.class).value();
                 validateModel(parameter.getType() , identifier, handler, request);
             }
