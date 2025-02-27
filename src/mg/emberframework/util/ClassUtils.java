@@ -39,4 +39,14 @@ public class ClassUtils {
 
     private ClassUtils() {
     }
+
+    public static <T> T getDefaultValue(Class<T> clazz) {
+        // Static map to avoid recreating the map on each method call
+
+        @SuppressWarnings("unchecked")
+        T defaultValue = (T) DEFAULT_VALUES.get(clazz);
+
+        // Return null for any class not explicitly mapped
+        return defaultValue;
+    }
 }
