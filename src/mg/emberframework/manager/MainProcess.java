@@ -20,9 +20,9 @@ import mg.emberframework.manager.exception.*;
 import mg.emberframework.manager.handler.ExceptionHandler;
 import mg.emberframework.manager.handler.RedirectionHandler;
 import mg.emberframework.manager.url.Mapping;
-import mg.emberframework.util.http.RequestUtil;
+import mg.emberframework.util.http.RequestUtils;
 import mg.emberframework.util.http.UrlParser;
-import mg.emberframework.util.http.UserRoleUtility;
+import mg.emberframework.util.http.UserRoleUtils;
 import mg.emberframework.util.reflection.ReflectionUtils;
 import mg.emberframework.util.scan.PackageScanner;
 import mg.emberframework.util.validation.Validator;
@@ -122,7 +122,7 @@ public class MainProcess {
 
     private static void validateUserRole(HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
-        UserRoleUtility userRoleUtility = new UserRoleUtility(defaultRoleAttribute);
+        UserRoleUtils userRoleUtility = new UserRoleUtils(defaultRoleAttribute);
         userRoleUtility.checkUserRole(request, verbMethod);
     }
 
@@ -133,7 +133,7 @@ public class MainProcess {
             InvalidRequestException, IOException, ServletException {
 
         if (validationExceptionHandler.containsException()) {
-            request = RequestUtil.generateHttpServletRequest(request, "GET");
+            request = RequestUtils.generateHttpServletRequest(request, "GET");
             return handleValidationException(controller, request, verbMethod);
         } else {
             return ReflectionUtils.executeRequestMethod(mapping, request, verb);

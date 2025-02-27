@@ -3,8 +3,8 @@ package mg.emberframework.util.http;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
-public class RequestUtil {
-    private RequestUtil() {}
+public class RequestUtils {
+    private RequestUtils() {}
 
     public static HttpServletRequestWrapper generateHttpServletRequest(HttpServletRequest source, String method) {
         return new HttpServletRequestWrapper(source) {

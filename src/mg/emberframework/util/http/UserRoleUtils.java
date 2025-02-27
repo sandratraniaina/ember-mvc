@@ -9,10 +9,10 @@ import mg.emberframework.annotation.RequiredRole;
 import mg.emberframework.manager.data.VerbMethod;
 import mg.emberframework.manager.exception.UnauthorizedAccessException;
 
-public class UserRoleUtility {
+public class UserRoleUtils {
     private String defaultRoleAttribute;
 
-    public UserRoleUtility(String roleAttribute) {
+    public UserRoleUtils(String roleAttribute) {
         setDefaultRoleAttribute(roleAttribute);
     }
 
