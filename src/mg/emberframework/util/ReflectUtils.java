@@ -14,7 +14,6 @@ import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.Session;
 import mg.emberframework.manager.exception.AnnotationNotPresentException;
 import mg.emberframework.manager.exception.InvalidRequestException;
-import mg.emberframework.manager.exception.ModelValidationException;
 import mg.emberframework.manager.url.Mapping;
 
 public class ReflectUtils {
@@ -52,7 +51,7 @@ public class ReflectUtils {
     public static Object executeRequestMethod(Mapping mapping, HttpServletRequest request, String verb)
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException,
-            AnnotationNotPresentException, InvalidRequestException, IOException, ServletException, ModelValidationException {
+            AnnotationNotPresentException, InvalidRequestException, IOException, ServletException {
         List<Object> objects = new ArrayList<>();
 
         Class<?> objClass = mapping.getClazz();
@@ -63,7 +62,7 @@ public class ReflectUtils {
 
         for (Parameter parameter : method.getParameters()) {
             Class<?> clazz = parameter.getType();
-            Object object = ObjectUtils.getDefaultValue(clazz);
+            Object object = ClassUtils.getDefaultValue(clazz);
             if (!parameter.isAnnotationPresent(RequestParameter.class) && !clazz.equals(Session.class)) {
                 throw new AnnotationNotPresentException(
                         "One of you parameter require `@RequestParameter` annotation");

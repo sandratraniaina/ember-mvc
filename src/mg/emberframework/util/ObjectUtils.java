@@ -8,7 +8,6 @@ import java.lang.reflect.Parameter;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -110,20 +109,5 @@ public class ObjectUtils {
         primitiveTypes.add(String.class);
 
         return primitiveTypes.contains(clazz);
-    }
-
-    public static Object getDefaultValue(Class<?> clazz) throws InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-        return getDefaultValue(clazz.getConstructor().newInstance());
-    }
-
-    public static Object getDefaultValue(Object object) {
-        HashMap<Class<?>, Object> keyValues = new HashMap<>();
-        keyValues.put(Integer.TYPE, 0);
-        keyValues.put(Double.TYPE, 0.0);
-        keyValues.put(String.class, "");
-        keyValues.put(Date.class, null);
-
-        return keyValues.get(object.getClass());
     }
 }
