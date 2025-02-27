@@ -7,8 +7,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +19,7 @@ public class ObjectUtils {
     }
 
     public static boolean isClassModel(Class<?> type) {
-        return !ObjectUtils.isPrimitive(type) && !type.equals(Session.class) && !type.equals(File.class);
+        return !ClassUtils.isPrimitive(type) && !type.equals(Session.class) && !type.equals(File.class);
     }
 
     public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
@@ -33,7 +31,7 @@ public class ObjectUtils {
         RequestParameter annotatedType = parameter.getAnnotation(RequestParameter.class);
         String annotationValue = annotatedType != null ? annotatedType.value() : "";
 
-        if (ObjectUtils.isPrimitive(clazz)) {
+        if (ClassUtils.isPrimitive(clazz)) {
 
             if (parameter.isAnnotationPresent(RequestParameter.class)) {
                 strValue = request.getParameter(annotationValue);
@@ -79,7 +77,7 @@ public class ObjectUtils {
         for (Field field : fields) {
             paramName = className + field.getName();
             String value = request.getParameter(paramName);
-            
+
             setObjectAttributesValues(instance, field, value);
         }
 
@@ -100,14 +98,5 @@ public class ObjectUtils {
         } else {
             return value;
         }
-    }
-
-    public static boolean isPrimitive(Class<?> clazz) {
-        List<Class<?>> primitiveTypes = new ArrayList<>();
-        primitiveTypes.add(Integer.TYPE);
-        primitiveTypes.add(Double.TYPE);
-        primitiveTypes.add(String.class);
-
-        return primitiveTypes.contains(clazz);
     }
 }
