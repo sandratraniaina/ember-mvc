@@ -17,8 +17,8 @@ import mg.emberframework.manager.exception.InvalidRequestException;
 import mg.emberframework.manager.url.Mapping;
 import mg.emberframework.util.conversion.ObjectConverter;
 
-public class ReflectUtils {
-    private ReflectUtils() {
+public class ReflectionUtils {
+    private ReflectionUtils() {
     }
 
     public static void setObjectAttributesValues(Object instance, Field field, String value)

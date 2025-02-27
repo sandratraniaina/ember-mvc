@@ -63,7 +63,7 @@ public class ObjectUtils {
             paramName = className + field.getName();
             String value = request.getParameter(paramName);
 
-            ReflectUtils.setObjectAttributesValues(instance, field, value);
+            ReflectionUtils.setObjectAttributesValues(instance, field, value);
         }
 
         return instance;
