@@ -1,18 +1,29 @@
 package mg.emberframework.util;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mg.emberframework.manager.data.File;
+import mg.emberframework.manager.data.Session;
+
 public class ClassUtils {
     private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>();
+    private static final Set<Class<?>> NON_MODEL_CLASSES = new HashSet<>();
 
     static {
         // Primitive types
@@ -35,6 +46,24 @@ public class ClassUtils {
         DEFAULT_VALUES.put(List.class, Collections.emptyList());
         DEFAULT_VALUES.put(Set.class, Collections.emptySet());
         DEFAULT_VALUES.put(Map.class, Collections.emptyMap());
+
+        NON_MODEL_CLASSES.addAll(Arrays.asList(
+                // System/utility classes
+                Session.class,
+                File.class,
+                Class.class,
+
+                // Collections and arrays
+                Collection.class,
+                List.class,
+                Set.class,
+                Map.class,
+
+                // Add any other classes that should not be considered models
+                InputStream.class,
+                OutputStream.class,
+                Reader.class,
+                Writer.class));
     }
 
     private ClassUtils() {
@@ -72,5 +101,23 @@ public class ClassUtils {
                 clazz == Long.class ||
                 clazz == Float.class ||
                 clazz == Double.class;
+    }
+
+    public static boolean isClassModel(Class<?> type) {
+        if (type == null) {
+            return false;
+        }
+
+        // First check if it's a primitive or common utility type
+        if (isPrimitive(type)) {
+            return false;
+        }
+
+        // Check if the class is in the exclusion list
+        return !NON_MODEL_CLASSES.contains(type) &&
+        // You might also want to exclude arrays and collections
+                !type.isArray() &&
+                !Collection.class.isAssignableFrom(type) &&
+                !Map.class.isAssignableFrom(type);
     }
 }
