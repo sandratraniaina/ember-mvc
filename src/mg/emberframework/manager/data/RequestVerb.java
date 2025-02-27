@@ -8,6 +8,9 @@ public class RequestVerb {
     public static final String DELETE = "DELETE";
     public static final String PUT = "PUT";
 
+    private RequestVerb() {
+    }
+
     public static String getMethodVerb(Method method) {
         String verb = RequestVerb.GET;
         if (method.isAnnotationPresent(mg.emberframework.annotation.request.Post.class)) {
