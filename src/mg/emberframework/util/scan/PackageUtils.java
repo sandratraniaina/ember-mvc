@@ -1,4 +1,4 @@
-package mg.emberframework.util;
+package mg.emberframework.util.scan;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import mg.emberframework.util.io.FileUtils;
 
 public class PackageUtils {
     private PackageUtils() {

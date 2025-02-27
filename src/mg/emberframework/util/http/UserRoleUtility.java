@@ -1,4 +1,4 @@
-package mg.emberframework.util;
+package mg.emberframework.util.http;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

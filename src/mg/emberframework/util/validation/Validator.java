@@ -9,7 +9,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.manager.exception.ModelValidationException;
-import mg.emberframework.util.ClassUtils;
+import mg.emberframework.util.reflection.ClassUtils;
 import mg.emberframework.util.validation.validators.FieldValidator;
 import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.FieldValidationResult;

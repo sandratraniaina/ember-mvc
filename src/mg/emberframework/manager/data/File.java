@@ -3,7 +3,7 @@ package mg.emberframework.manager.data;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import mg.emberframework.util.FileUtils;
+import mg.emberframework.util.io.FileUtils;
 
 public class File {
     String fileName;

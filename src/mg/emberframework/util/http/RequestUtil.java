@@ -1,4 +1,4 @@
-package mg.emberframework.util;
+package mg.emberframework.util.http;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
