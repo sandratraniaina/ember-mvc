@@ -140,7 +140,7 @@ public class MainProcess {
         defaultRoleAttribute = initParameter.getRoleAttributeName();
 
         FrontController.setUrlMapping(urlMappings);
-        controller.setInitParameter(initParameter);
+        FrontController.setInitParameter(initParameter);
     }
 
     // Getters and setters
