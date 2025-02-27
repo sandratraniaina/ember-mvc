@@ -20,28 +20,11 @@ public class ReflectUtils {
     private ReflectUtils() {
     }
 
-    public static boolean hasAttributeOfType(Class<?> clazz, Class<?> type) {
-        for (Field field : clazz.getDeclaredFields()) {
-            if (field.getType().equals(type)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static String getMethodName(String initial, String attributeName) {
-        return initial + Character.toUpperCase(attributeName.charAt(0)) + attributeName.substring(1);
-    }
-
-    public static String getSetterMethod(String attributeName) {
-        return getMethodName("set", attributeName);
-    }
-
     public static void setSessionAttribute(Object object, HttpServletRequest request) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         String methodName = null; 
         for(Field field : object.getClass().getDeclaredFields()) {
             if (field.getType().equals(Session.class)) {
-                methodName = getSetterMethod(field.getName());
+                methodName = ClassUtils.getSetterMethod(field.getName());
                 Session session = new Session(request.getSession());
                 executeMethod(object, methodName, session);
             }
@@ -76,21 +59,9 @@ public class ReflectUtils {
         return executeMethod(requestObject, method.getName(), objects.toArray());
     }
 
-    public static Class<?>[] getArgsClasses(Object... args) {
-        Class<?>[] classes = new Class[args.length];
-        int i = 0;
-
-        for (Object object : args) {
-            classes[i] = object.getClass();
-            i++;
-        }
-
-        return classes;
-    }
-
     public static Object executeMethod(Object object, String methodName, Object... args) throws NoSuchMethodException,
             SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Method method = object.getClass().getMethod(methodName, getArgsClasses(args));
+        Method method = object.getClass().getMethod(methodName, ClassUtils.getArgsClasses(args));
         return method.invoke(object, args);
     }
 

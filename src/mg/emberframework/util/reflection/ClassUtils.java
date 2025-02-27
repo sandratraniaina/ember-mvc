@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
@@ -119,5 +120,34 @@ public class ClassUtils {
                 !type.isArray() &&
                 !Collection.class.isAssignableFrom(type) &&
                 !Map.class.isAssignableFrom(type);
+    }
+
+    public static boolean hasAttributeOfType(Class<?> clazz, Class<?> type) {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.getType().equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String getMethodName(String initial, String attributeName) {
+        return initial + Character.toUpperCase(attributeName.charAt(0)) + attributeName.substring(1);
+    }
+
+    public static String getSetterMethod(String attributeName) {
+        return getMethodName("set", attributeName);
+    }
+
+    public static Class<?>[] getArgsClasses(Object... args) {
+        Class<?>[] classes = new Class[args.length];
+        int i = 0;
+
+        for (Object object : args) {
+            classes[i] = object.getClass();
+            i++;
+        }
+
+        return classes;
     }
 }

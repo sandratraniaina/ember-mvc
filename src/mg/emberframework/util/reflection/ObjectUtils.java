@@ -54,7 +54,7 @@ public class ObjectUtils {
             IllegalArgumentException, InvocationTargetException {
 
         Object fieldValue = ObjectConverter.castObject(value, field.getType());
-        String setterMethodName = ReflectUtils.getSetterMethod(field.getName());
+        String setterMethodName = ClassUtils.getSetterMethod(field.getName());
         Method method = instance.getClass().getMethod(setterMethodName, field.getType());
         method.invoke(instance, fieldValue);
     }
