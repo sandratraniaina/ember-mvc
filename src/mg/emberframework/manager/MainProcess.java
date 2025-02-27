@@ -1,8 +1,8 @@
 package mg.emberframework.manager;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,131 +16,169 @@ import mg.emberframework.manager.data.InitParameter;
 import mg.emberframework.manager.data.ModelValidationExceptionHandler;
 import mg.emberframework.manager.data.ModelView;
 import mg.emberframework.manager.data.VerbMethod;
-import mg.emberframework.manager.exception.AnnotationNotPresentException;
-import mg.emberframework.manager.exception.DuplicateUrlException;
-import mg.emberframework.manager.exception.IllegalReturnTypeException;
-import mg.emberframework.manager.exception.InvalidControllerPackageException;
-import mg.emberframework.manager.exception.InvalidRequestException;
-import mg.emberframework.manager.exception.ModelValidationException;
-import mg.emberframework.manager.exception.UnauthorizedAccessException;
-import mg.emberframework.manager.exception.UrlNotFoundException;
+import mg.emberframework.manager.exception.*;
 import mg.emberframework.manager.handler.ExceptionHandler;
 import mg.emberframework.manager.handler.RedirectionHandler;
 import mg.emberframework.manager.url.Mapping;
-import mg.emberframework.util.PackageScanner;
-import mg.emberframework.util.ReflectUtils;
-import mg.emberframework.util.RequestUtil;
-import mg.emberframework.util.UserRoleUtility;
+import mg.emberframework.util.*;
 import mg.emberframework.util.validation.Validator;
 
+/**
+ * Main process handler for the Ember Framework.
+ * Manages request processing, initialization, and request handling flow.
+ */
 public class MainProcess {
-    static FrontController frontController;
+    // Constants
+    private static final String CONTENT_TYPE_JSON = "application/json";
+
+    // Instance variables
     private List<Exception> exceptions;
-    private static ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
 
+    // Static variables
+    private static FrontController frontController;
+    private static ModelValidationExceptionHandler validationExceptionHandler = new ModelValidationExceptionHandler();
     private static String defaultRoleAttribute;
+    private static final Gson gson = new Gson();
 
-    private static String handleRest(Object methodObject, HttpServletResponse response) {
-        Gson gson = new Gson();
-        String json = null;
-        if (methodObject instanceof ModelView modelView) {
-            json = gson.toJson((modelView).getData());
-        } else {
-            json = gson.toJson(methodObject);
-        }
-        response.setContentType("application/json");
-        return json;
-    }
+    public static void init(FrontController controller)
+            throws ClassNotFoundException, IOException, DuplicateUrlException, InvalidControllerPackageException {
+        frontController = controller;
 
-    private static void prepareRequest(FrontController controller, HttpServletRequest request) {
-        if (handler == null)
-            handler = new ModelValidationExceptionHandler();
-        if (request.getAttribute(controller.getInitParameter().getErrorParamName()) == null) {
-            request.setAttribute(controller.getInitParameter().getErrorParamName(), handler);
-        }
+        // Extract initialization parameters
+        String packageName = controller.getInitParameter("package_name");
+        String errorParamName = controller.getInitParameter("error_param_name");
+        String errorRedirectionParamName = controller.getInitParameter("error_redirection_param_name");
+        String roleAttributeName = controller.getInitParameter("role_attribute_name");
+
+        // Create initialization parameter object
+        InitParameter initParameter = new InitParameter(
+                errorParamName, packageName, errorRedirectionParamName, roleAttributeName);
+
+        // Store role attribute name for role checking
+        defaultRoleAttribute = initParameter.getRoleAttributeName();
+
+        // Scan package for mappings
+        HashMap<String, Mapping> urlMappings = (HashMap<String, Mapping>) PackageScanner.scanPackage(packageName);
+
+        // Set mappings and parameters in FrontController
+        FrontController.setUrlMapping(urlMappings);
+        FrontController.setInitParameter(initParameter);
     }
 
     public static void handleRequest(FrontController controller, HttpServletRequest request,
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException,
-            AnnotationNotPresentException, InvalidRequestException, ModelValidationException,
-            UnauthorizedAccessException {
-        PrintWriter out = response.getWriter();
-        String verb = request.getMethod();
+            AnnotationNotPresentException, InvalidRequestException,
+            UnauthorizedAccessException, URISyntaxException {
 
+        // Check for existing exceptions in controller
         if (controller.getException() != null) {
             ExceptionHandler.handleException(controller.getException(), response);
             return;
         }
 
-        String url = request.getRequestURI().substring(request.getContextPath().length());
-        Mapping mapping = frontController.getUrlMapping().get(url);
+        // Extract request information
+        String verb = request.getMethod();
+        String url = UrlParser.getRoute(request.getRequestURI());
 
+        // Find mapping for URL
+        Mapping mapping = findMappingForUrl(url);
         if (mapping == null) {
             throw new UrlNotFoundException("Oops, url not found!(" + url + ")");
         }
 
+        // Get method for HTTP verb
         VerbMethod verbMethod = mapping.getSpecificVerbMethod(verb);
 
-        UserRoleUtility userRoleUtility = new UserRoleUtility(defaultRoleAttribute);
-        userRoleUtility.checkUserRole(request, verbMethod);
+        // Validate user role for access
+        validateUserRole(request, verbMethod);
 
-        handler = Validator.validateMethod(verbMethod.getMethod(), request);
+        // Validate method parameters
+        validationExceptionHandler = Validator.validateMethod(verbMethod.getMethod(), request);
 
-        Object result;
+        // Process request and get result
+        Object result = processRequest(controller, request, mapping, verb, verbMethod);
 
-        if (handler.containsException()) {
-            ModelView modelView = new ModelView();
-            modelView.setRedirect(false);
-            modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
-
-            request = RequestUtil.generateHttpServletRequest(request, "GET");
-
-            if (verbMethod.isRestAPI()) {
-                modelView.addObject(controller.getInitParameter().getErrorParamName(), handler);
-            }
-
-            result = modelView;
-        } else {
-            result = ReflectUtils.executeRequestMethod(mapping, request, verb);
-        }
-
+        // Prepare request with validation results
         prepareRequest(controller, request);
 
+        // Handle REST API responses
         if (verbMethod.isRestAPI()) {
-            result = handleRest(result, response);
+            result = convertToJson(result, response);
         }
 
+        // Send response based on result type
+        sendResponse(result, request, response);
+    }
+
+    private static Mapping findMappingForUrl(String url) {
+        return frontController.getUrlMapping().get(url);
+    }
+
+    private static void validateUserRole(HttpServletRequest request, VerbMethod verbMethod)
+            throws UnauthorizedAccessException {
+        UserRoleUtility userRoleUtility = new UserRoleUtility(defaultRoleAttribute);
+        userRoleUtility.checkUserRole(request, verbMethod);
+    }
+
+    private static Object processRequest(FrontController controller, HttpServletRequest request,
+            Mapping mapping, String verb, VerbMethod verbMethod)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+            InstantiationException, NoSuchMethodException, SecurityException, AnnotationNotPresentException,
+            InvalidRequestException, IOException, ServletException {
+
+        if (validationExceptionHandler.containsException()) {
+            request = RequestUtil.generateHttpServletRequest(request, "GET");
+            return handleValidationException(controller, request, verbMethod);
+        } else {
+            return ReflectUtils.executeRequestMethod(mapping, request, verb);
+        }
+    }
+
+    private static ModelView handleValidationException(FrontController controller,
+            HttpServletRequest request, VerbMethod verbMethod) {
+        ModelView modelView = new ModelView();
+        modelView.setRedirect(false);
+        modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
+
+        if (verbMethod.isRestAPI()) {
+            modelView.addObject(controller.getInitParameter().getErrorParamName(), validationExceptionHandler);
+        }
+
+        return modelView;
+    }
+
+    private static void prepareRequest(FrontController controller, HttpServletRequest request) {
+        if (validationExceptionHandler == null) {
+            validationExceptionHandler = new ModelValidationExceptionHandler();
+        }
+
+        if (request.getAttribute(controller.getInitParameter().getErrorParamName()) == null) {
+            request.setAttribute(controller.getInitParameter().getErrorParamName(), validationExceptionHandler);
+        }
+    }
+
+    private static String convertToJson(Object methodObject, HttpServletResponse response) {
+        String json;
+        if (methodObject instanceof ModelView modelView) {
+            json = gson.toJson(modelView.getData());
+        } else {
+            json = gson.toJson(methodObject);
+        }
+        response.setContentType(CONTENT_TYPE_JSON);
+        return json;
+    }
+
+    private static void sendResponse(Object result, HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException, IllegalReturnTypeException {
         if (result instanceof String) {
-            out.println(result.toString());
+            response.getWriter().println(result.toString());
         } else if (result instanceof ModelView modelView) {
             RedirectionHandler.redirect(request, response, modelView);
         } else {
             throw new IllegalReturnTypeException("Invalid return type");
         }
-
-    }
-
-    public static void init(FrontController controller)
-            throws ClassNotFoundException, IOException, DuplicateUrlException, InvalidControllerPackageException {
-        frontController = controller;
-
-        String packageName = controller.getInitParameter("package_name");
-        String errorParamName = controller.getInitParameter("error_param_name");
-        String errorRedirectionParamName = controller.getInitParameter("error_redirection_param_name");
-        String roleAttributeName = controller.getInitParameter("role_attribute_name");
-
-        HashMap<String, Mapping> urlMappings;
-        urlMappings = (HashMap<String, Mapping>) PackageScanner.scanPackage(packageName);
-
-        InitParameter initParameter = new InitParameter(errorParamName, packageName, errorRedirectionParamName,
-                roleAttributeName);
-
-        defaultRoleAttribute = initParameter.getRoleAttributeName();
-
-        FrontController.setUrlMapping(urlMappings);
-        FrontController.setInitParameter(initParameter);
     }
 
     // Getters and setters
