@@ -18,7 +18,7 @@ import mg.emberframework.manager.url.Mapping;
 
 @MultipartConfig
 public class FrontController extends HttpServlet {
-    private Map<String, Mapping> URLMappings;
+    private static transient Map<String, Mapping> urlMappings;
     private Exception exception = null;
     private InitParameter initParameter;
 
@@ -73,12 +73,12 @@ public class FrontController extends HttpServlet {
     }
 
     // Getters and setters
-    public Map<String, Mapping> getURLMapping() {
-        return URLMappings;
+    public Map<String, Mapping> getUrlMapping() {
+        return urlMappings;
     }
 
-    public void setURLMapping(Map<String, Mapping> urlMapping) {
-        this.URLMappings = urlMapping;
+    public static void setUrlMapping(Map<String, Mapping> urlMapping) {
+        urlMappings = urlMapping;
     }
 
     public Exception getException() {

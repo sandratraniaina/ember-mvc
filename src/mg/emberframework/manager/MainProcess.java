@@ -75,7 +75,7 @@ public class MainProcess {
         }
 
         String url = request.getRequestURI().substring(request.getContextPath().length());
-        Mapping mapping = frontController.getURLMapping().get(url);
+        Mapping mapping = frontController.getUrlMapping().get(url);
 
         if (mapping == null) {
             throw new UrlNotFoundException("Oops, url not found!(" + url + ")");
@@ -139,7 +139,7 @@ public class MainProcess {
 
         defaultRoleAttribute = initParameter.getRoleAttributeName();
 
-        controller.setURLMapping(urlMappings);
+        FrontController.setUrlMapping(urlMappings);
         controller.setInitParameter(initParameter);
     }
 
