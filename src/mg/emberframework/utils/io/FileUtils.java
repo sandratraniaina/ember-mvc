@@ -1,4 +1,4 @@
-package mg.emberframework.util.io;
+package mg.emberframework.utils.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

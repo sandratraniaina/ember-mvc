@@ -1,4 +1,4 @@
-package mg.emberframework.util.validation;
+package mg.emberframework.utils.validation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,8 +9,8 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.manager.exception.ModelValidationException;
-import mg.emberframework.util.reflection.ClassUtils;
-import mg.emberframework.util.validation.validators.FieldValidator;
+import mg.emberframework.utils.reflection.ClassUtils;
+import mg.emberframework.utils.validation.validators.FieldValidator;
 import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.FieldValidationResult;
 import mg.emberframework.manager.data.ModelValidationResults;

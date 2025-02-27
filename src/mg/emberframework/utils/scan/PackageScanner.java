@@ -1,4 +1,4 @@
-package mg.emberframework.util.scan;
+package mg.emberframework.utils.scan;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

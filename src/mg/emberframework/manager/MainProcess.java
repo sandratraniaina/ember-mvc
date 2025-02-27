@@ -20,12 +20,12 @@ import mg.emberframework.manager.exception.*;
 import mg.emberframework.manager.handler.ExceptionHandler;
 import mg.emberframework.manager.handler.RedirectionHandler;
 import mg.emberframework.manager.url.Mapping;
-import mg.emberframework.util.http.RequestUtils;
-import mg.emberframework.util.http.UrlParser;
-import mg.emberframework.util.http.UserRoleUtils;
-import mg.emberframework.util.reflection.ReflectionUtils;
-import mg.emberframework.util.scan.PackageScanner;
-import mg.emberframework.util.validation.Validator;
+import mg.emberframework.utils.http.RequestUtils;
+import mg.emberframework.utils.http.UrlParser;
+import mg.emberframework.utils.http.UserRoleUtils;
+import mg.emberframework.utils.reflection.ReflectionUtils;
+import mg.emberframework.utils.scan.PackageScanner;
+import mg.emberframework.utils.validation.Validator;
 
 /**
  * Main process handler for the Ember Framework.

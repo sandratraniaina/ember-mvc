@@ -1,4 +1,4 @@
-package mg.emberframework.util.http;
+package mg.emberframework.utils.http;
 
 import java.net.URI;
 import java.net.URISyntaxException;

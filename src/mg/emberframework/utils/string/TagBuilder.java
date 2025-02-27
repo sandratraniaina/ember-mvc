@@ -1,4 +1,4 @@
-package mg.emberframework.util.string;
+package mg.emberframework.utils.string;
 
 public class TagBuilder {
     private TagBuilder() {
