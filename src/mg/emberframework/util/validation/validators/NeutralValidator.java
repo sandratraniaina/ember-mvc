@@ -1,4 +1,4 @@
-package mg.emberframework.util.validation.validator;
+package mg.emberframework.util.validation.validators;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
