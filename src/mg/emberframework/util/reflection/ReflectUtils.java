@@ -15,14 +15,26 @@ import mg.emberframework.manager.data.Session;
 import mg.emberframework.manager.exception.AnnotationNotPresentException;
 import mg.emberframework.manager.exception.InvalidRequestException;
 import mg.emberframework.manager.url.Mapping;
+import mg.emberframework.util.conversion.ObjectConverter;
 
 public class ReflectUtils {
     private ReflectUtils() {
     }
 
-    public static void setSessionAttribute(Object object, HttpServletRequest request) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        String methodName = null; 
-        for(Field field : object.getClass().getDeclaredFields()) {
+    public static void setObjectAttributesValues(Object instance, Field field, String value)
+            throws SecurityException, NoSuchMethodException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
+
+        Object fieldValue = ObjectConverter.castObject(value, field.getType());
+        String setterMethodName = ClassUtils.getSetterMethod(field.getName());
+        Method method = instance.getClass().getMethod(setterMethodName, field.getType());
+        method.invoke(instance, fieldValue);
+    }
+
+    public static void setSessionAttribute(Object object, HttpServletRequest request) throws NoSuchMethodException,
+            SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        String methodName = null;
+        for (Field field : object.getClass().getDeclaredFields()) {
             if (field.getType().equals(Session.class)) {
                 methodName = ClassUtils.getSetterMethod(field.getName());
                 Session session = new Session(request.getSession());
@@ -40,7 +52,7 @@ public class ReflectUtils {
         Class<?> objClass = mapping.getClazz();
         Object requestObject = objClass.getConstructor().newInstance();
         Method method = mapping.getSpecificVerbMethod(verb).getMethod();
-        
+
         setSessionAttribute(requestObject, request);
 
         for (Parameter parameter : method.getParameters()) {

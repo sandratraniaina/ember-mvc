@@ -3,7 +3,6 @@ package mg.emberframework.util.reflection;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 import jakarta.servlet.ServletException;
@@ -49,16 +48,6 @@ public class ObjectUtils {
         return object;
     }
 
-    private static void setObjectAttributesValues(Object instance, Field field, String value)
-            throws SecurityException, NoSuchMethodException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
-
-        Object fieldValue = ObjectConverter.castObject(value, field.getType());
-        String setterMethodName = ClassUtils.getSetterMethod(field.getName());
-        Method method = instance.getClass().getMethod(setterMethodName, field.getType());
-        method.invoke(instance, fieldValue);
-    }
-
     public static Object getObjectInstance(Class<?> classType, String annotationValue, HttpServletRequest request)
             throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             NoSuchMethodException, SecurityException {
@@ -74,7 +63,7 @@ public class ObjectUtils {
             paramName = className + field.getName();
             String value = request.getParameter(paramName);
 
-            setObjectAttributesValues(instance, field, value);
+            ReflectUtils.setObjectAttributesValues(instance, field, value);
         }
 
         return instance;
