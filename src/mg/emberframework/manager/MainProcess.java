@@ -3,6 +3,7 @@ package mg.emberframework.manager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -70,23 +71,34 @@ public class MainProcess {
         return role.toString();
     }
 
-    private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
+    public static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
+        Method method = verbMethod.getMethod();
 
-        RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
-        if (requiredRole != null) {
-            String roleStr = getUserRoleFromSession(request);
-            String[] allowedRoles = requiredRole.values();
-            boolean hasRequiredRole = false;
-            for (String allowed : allowedRoles) {
-                if (allowed.equalsIgnoreCase(roleStr)) {
-                    hasRequiredRole = true;
-                    break;
-                }
-            }
-            if (!hasRequiredRole) {
+        RequiredRole classRole = method.getDeclaringClass().getAnnotation(RequiredRole.class);
+        RequiredRole methodRole = method.getAnnotation(RequiredRole.class);
+
+        if (classRole == null && methodRole == null) {
+            return;
+        }
+
+        String userRole = getUserRoleFromSession(request);
+
+        if (classRole != null) {
+            String[] classRequiredRoles = classRole.values();
+            if (!hasRequiredRole(userRole, classRequiredRoles)) {
                 throw new UnauthorizedAccessException(
-                        "Required role not found. Required: " + Arrays.toString(allowedRoles));
+                        "Class-level role check failed. Required: " + Arrays.toString(classRequiredRoles) +
+                                ", Found: " + userRole);
+            }
+        }
+
+        if (methodRole != null) {
+            String[] methodRequiredRoles = methodRole.values();
+            if (!hasRequiredRole(userRole, methodRequiredRoles)) {
+                throw new UnauthorizedAccessException(
+                        "Method-level role check failed. Required: " + Arrays.toString(methodRequiredRoles) +
+                                ", Found: " + userRole);
             }
         }
     }
