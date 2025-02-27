@@ -3,6 +3,7 @@ package mg.emberframework.manager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -42,35 +43,62 @@ public class MainProcess {
 
     private static String defaultRoleAttribute;
 
-    private static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
+    private static boolean hasRequiredRole(String userRole, String[] requiredRoles) {
+        if (userRole == null || requiredRoles == null || requiredRoles.length == 0) {
+            return false;
+        }
+
+        for (String required : requiredRoles) {
+            if (required.equalsIgnoreCase(userRole)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String getUserRoleFromSession(HttpServletRequest request)
             throws UnauthorizedAccessException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new UnauthorizedAccessException("No active session found");
+        }
 
-        RequiredRole requiredRole = verbMethod.getMethod().getAnnotation(RequiredRole.class);
-        if (requiredRole != null) {
-            HttpSession session = request.getSession(false);
+        Object role = session.getAttribute(defaultRoleAttribute);
+        if (role == null) {
+            throw new UnauthorizedAccessException("No role defined in session");
+        }
 
-            if (session == null) {
-                throw new UnauthorizedAccessException("No active session found");
-            }
+        return role.toString();
+    }
 
-            Object role = session.getAttribute(defaultRoleAttribute);
+    public static void checkUserRole(HttpServletRequest request, VerbMethod verbMethod)
+            throws UnauthorizedAccessException {
+        Method method = verbMethod.getMethod();
 
-            if (role == null) {
-                throw new UnauthorizedAccessException("No role defined in session");
-            }
+        RequiredRole classRole = method.getDeclaringClass().getAnnotation(RequiredRole.class);
+        RequiredRole methodRole = method.getAnnotation(RequiredRole.class);
 
-            String roleStr = role.toString();
-            String[] allowedRoles = requiredRole.values();
-            boolean hasRequiredRole = false;
-            for (String allowed : allowedRoles) {
-                if (allowed.equalsIgnoreCase(roleStr)) {
-                    hasRequiredRole = true;
-                    break;
-                }
-            }
-            if (!hasRequiredRole) {
+        if (classRole == null && methodRole == null) {
+            return;
+        }
+
+        String userRole = getUserRoleFromSession(request);
+
+        if (classRole != null) {
+            String[] classRequiredRoles = classRole.values();
+            if (!hasRequiredRole(userRole, classRequiredRoles)) {
                 throw new UnauthorizedAccessException(
-                        "Required role not found. Required: " + Arrays.toString(allowedRoles));
+                        "Class-level role check failed. Required: " + Arrays.toString(classRequiredRoles) +
+                                ", Found: " + userRole);
+            }
+        }
+
+        if (methodRole != null) {
+            String[] methodRequiredRoles = methodRole.values();
+            if (!hasRequiredRole(userRole, methodRequiredRoles)) {
+                throw new UnauthorizedAccessException(
+                        "Method-level role check failed. Required: " + Arrays.toString(methodRequiredRoles) +
+                                ", Found: " + userRole);
             }
         }
     }
