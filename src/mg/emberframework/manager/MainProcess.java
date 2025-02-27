@@ -42,6 +42,19 @@ public class MainProcess {
 
     private static String defaultRoleAttribute;
 
+    private static boolean hasRequiredRole(String userRole, String[] requiredRoles) {
+        if (userRole == null || requiredRoles == null || requiredRoles.length == 0) {
+            return false;
+        }
+
+        for (String required : requiredRoles) {
+            if (required.equalsIgnoreCase(userRole)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static String getUserRoleFromSession(HttpServletRequest request)
             throws UnauthorizedAccessException {
         HttpSession session = request.getSession(false);
