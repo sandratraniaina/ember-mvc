@@ -12,9 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import mg.emberframework.manager.MainProcess;
 import mg.emberframework.manager.data.InitParameter;
 import mg.emberframework.manager.exception.DuplicateUrlException;
-import mg.emberframework.manager.exception.IllegalReturnTypeException;
 import mg.emberframework.manager.exception.InvalidControllerPackageException;
-import mg.emberframework.manager.exception.UrlNotFoundException;
 import mg.emberframework.manager.handler.ExceptionHandler;
 import mg.emberframework.manager.url.Mapping;
 
@@ -29,8 +27,6 @@ public class FrontController extends HttpServlet {
             throws ServletException, IOException {
         try {
             MainProcess.handleRequest(this, request, response);
-        } catch (UrlNotFoundException | IllegalReturnTypeException e) {
-            ExceptionHandler.handleException(e, response);
         } catch (Exception e) {
             ExceptionHandler.handleException(e, response);
         }
