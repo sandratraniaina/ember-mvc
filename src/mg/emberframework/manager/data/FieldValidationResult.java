@@ -3,7 +3,7 @@ package mg.emberframework.manager.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldExceptions {
+public class FieldValidationResult {
     private List<Exception> exceptions = new ArrayList<>();
     private String value = "";
 
@@ -29,10 +29,10 @@ public class FieldExceptions {
     }
 
     // Constructor
-    public FieldExceptions() {
+    public FieldValidationResult() {
     }
 
-    public FieldExceptions(List<Exception> exceptions, String value) {
+    public FieldValidationResult(List<Exception> exceptions, String value) {
         setExceptions(exceptions);
         setValue(value);
     }

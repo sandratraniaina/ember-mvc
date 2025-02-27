@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class ModelValidationExceptionHandler {
-    Map<String, FieldExceptions> fieldExceptions = new HashMap<>();
+    Map<String, FieldValidationResult> fieldExceptions = new HashMap<>();
 
     // Methods
     public boolean containsException() {
-        FieldExceptions temp = null;
+        FieldValidationResult temp = null;
 
-        for (Entry<String, FieldExceptions> entry : getFieldExceptions().entrySet()) {
+        for (Entry<String, FieldValidationResult> entry : getFieldExceptions().entrySet()) {
             temp = entry.getValue();
             if (temp.containsException()) {
                 return true;
@@ -22,33 +22,33 @@ public class ModelValidationExceptionHandler {
     }
 
     public String getFieldExceptionMessage(String field) {
-        FieldExceptions fieldExc = getFieldExceptions(field);
+        FieldValidationResult fieldExc = getFieldExceptions(field);
         return fieldExc.getExceptionMessage();
     }
 
     public String getFieldExceptionMessage(String field, String separator) {
-        FieldExceptions fieldExc = getFieldExceptions(field);
+        FieldValidationResult fieldExc = getFieldExceptions(field);
         return fieldExc.getExceptionMessage(separator);
     }
 
     public String getFieldExceptionValue(String field) {
-        FieldExceptions fieldExc = getFieldExceptions(field);
+        FieldValidationResult fieldExc = getFieldExceptions(field);
         return fieldExc.getValue();
     }
 
     public void addException(String field, Exception exepction) {
-        FieldExceptions fieldExc = getFieldExceptions(field);
+        FieldValidationResult fieldExc = getFieldExceptions(field);
         fieldExc.addException(exepction);
     }
 
-    public void addFieldException(String field, FieldExceptions fieldExceptions) {
+    public void addFieldException(String field, FieldValidationResult fieldExceptions) {
         this.fieldExceptions.put(field, fieldExceptions);
     }
 
-    public FieldExceptions getFieldExceptions(String field) {
-        FieldExceptions fieldExc = getFieldExceptions().get(field);
+    public FieldValidationResult getFieldExceptions(String field) {
+        FieldValidationResult fieldExc = getFieldExceptions().get(field);
         if (fieldExc == null) {
-            fieldExc = new FieldExceptions();
+            fieldExc = new FieldValidationResult();
             getFieldExceptions().put(field, fieldExc);
         }
         return fieldExc;
@@ -58,16 +58,16 @@ public class ModelValidationExceptionHandler {
     public ModelValidationExceptionHandler() {
     }
 
-    public ModelValidationExceptionHandler(Map<String, FieldExceptions> exepctions) {
+    public ModelValidationExceptionHandler(Map<String, FieldValidationResult> exepctions) {
         setFieldExceptions(exepctions);
     }
 
     // Getters and setters
-    public Map<String, FieldExceptions> getFieldExceptions() {
+    public Map<String, FieldValidationResult> getFieldExceptions() {
         return fieldExceptions;
     }
 
-    public void setFieldExceptions(Map<String, FieldExceptions> fieldExceptions) {
+    public void setFieldExceptions(Map<String, FieldValidationResult> fieldExceptions) {
         this.fieldExceptions = fieldExceptions;
     }
 }

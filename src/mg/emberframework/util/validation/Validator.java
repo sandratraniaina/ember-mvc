@@ -12,7 +12,7 @@ import mg.emberframework.manager.exception.ModelValidationException;
 import mg.emberframework.util.ClassUtils;
 import mg.emberframework.util.validation.validator.FieldValidator;
 import mg.emberframework.annotation.RequestParameter;
-import mg.emberframework.manager.data.FieldExceptions;
+import mg.emberframework.manager.data.FieldValidationResult;
 import mg.emberframework.manager.data.ModelValidationExceptionHandler;
 
 public class Validator {
@@ -31,9 +31,9 @@ public class Validator {
         }
     }
 
-    public static FieldExceptions getModelFieldExceptions(String value, Field field) {
+    public static FieldValidationResult getModelFieldExceptions(String value, Field field) {
         List<Exception> exceptions = new ArrayList<>();
-        FieldExceptions fieldExceptions = new FieldExceptions(exceptions, value);
+        FieldValidationResult fieldExceptions = new FieldValidationResult(exceptions, value);
 
         Annotation[] annotations = field.getDeclaredAnnotations();
 
@@ -57,7 +57,7 @@ public class Validator {
 
         for (Field field : fields) {
             String name = identifier + "." + field.getName();
-            FieldExceptions temp = getModelFieldExceptions(request.getParameter(name), field);
+            FieldValidationResult temp = getModelFieldExceptions(request.getParameter(name), field);
             handler.addFieldException(name, temp);
         }
     }
