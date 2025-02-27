@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class ModelValidationExceptionHandler {
+public class ModelValidationResults {
     Map<String, FieldValidationResult> fieldExceptions = new HashMap<>();
 
     // Methods
@@ -55,10 +55,10 @@ public class ModelValidationExceptionHandler {
     }
 
     // Constructor
-    public ModelValidationExceptionHandler() {
+    public ModelValidationResults() {
     }
 
-    public ModelValidationExceptionHandler(Map<String, FieldValidationResult> exepctions) {
+    public ModelValidationResults(Map<String, FieldValidationResult> exepctions) {
         setFieldExceptions(exepctions);
     }
 

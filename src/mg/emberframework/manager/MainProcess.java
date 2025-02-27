@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mg.emberframework.controller.FrontController;
 import mg.emberframework.manager.data.InitParameter;
-import mg.emberframework.manager.data.ModelValidationExceptionHandler;
+import mg.emberframework.manager.data.ModelValidationResults;
 import mg.emberframework.manager.data.ModelView;
 import mg.emberframework.manager.data.VerbMethod;
 import mg.emberframework.manager.exception.*;
@@ -36,7 +36,7 @@ public class MainProcess {
 
     // Static variables
     private static FrontController frontController;
-    private static ModelValidationExceptionHandler validationExceptionHandler = new ModelValidationExceptionHandler();
+    private static ModelValidationResults validationExceptionHandler = new ModelValidationResults();
     private static String defaultRoleAttribute;
     private static final Gson gson = new Gson();
 
@@ -151,7 +151,7 @@ public class MainProcess {
 
     private static void prepareRequest(FrontController controller, HttpServletRequest request) {
         if (validationExceptionHandler == null) {
-            validationExceptionHandler = new ModelValidationExceptionHandler();
+            validationExceptionHandler = new ModelValidationResults();
         }
 
         if (request.getAttribute(controller.getInitParameter().getErrorParamName()) == null) {

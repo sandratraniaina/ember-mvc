@@ -13,7 +13,7 @@ import mg.emberframework.util.ClassUtils;
 import mg.emberframework.util.validation.validator.FieldValidator;
 import mg.emberframework.annotation.RequestParameter;
 import mg.emberframework.manager.data.FieldValidationResult;
-import mg.emberframework.manager.data.ModelValidationExceptionHandler;
+import mg.emberframework.manager.data.ModelValidationResults;
 
 public class Validator {
 
@@ -52,7 +52,7 @@ public class Validator {
         return fieldExceptions;
     }
 
-    public static void validateModel(Class<?> modelType, String identifier, ModelValidationExceptionHandler handler, HttpServletRequest request) {
+    public static void validateModel(Class<?> modelType, String identifier, ModelValidationResults handler, HttpServletRequest request) {
         Field[] fields = modelType.getDeclaredFields();
 
         for (Field field : fields) {
@@ -62,8 +62,8 @@ public class Validator {
         }
     }
 
-    public static ModelValidationExceptionHandler validateMethod(Method method, HttpServletRequest request) {
-        ModelValidationExceptionHandler handler = new ModelValidationExceptionHandler();
+    public static ModelValidationResults validateMethod(Method method, HttpServletRequest request) {
+        ModelValidationResults handler = new ModelValidationResults();
 
         Parameter[] parameters = method.getParameters();
 
