@@ -30,7 +30,7 @@ import mg.emberframework.utils.validation.Validator;
  * Main process handler for the Ember Framework.
  * Manages request processing, initialization, and request handling flow.
  */
-public class MainProcess {
+public class RequestHandler {
     // Constants
     private static final String CONTENT_TYPE_JSON = "application/json";
 

@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import mg.emberframework.manager.MainProcess;
+import mg.emberframework.manager.RequestHandler;
 import mg.emberframework.manager.data.InitParameter;
 import mg.emberframework.manager.exception.DuplicateUrlException;
 import mg.emberframework.manager.exception.InvalidControllerPackageException;
@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            MainProcess.handleRequest(this, request, response);
+            RequestHandler.handleRequest(this, request, response);
         } catch (Exception e) {
             ExceptionHandler.handleException(e, response);
         }
@@ -64,7 +64,7 @@ public class FrontController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            MainProcess.init(this);
+            RequestHandler.init(this);
         } catch (InvalidControllerPackageException | DuplicateUrlException e) {
             setException(e);
         } catch (Exception e) {
