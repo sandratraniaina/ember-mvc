@@ -37,7 +37,6 @@ public class RequestHandler {
 
     public void init(FrontController controller)
             throws ClassNotFoundException, IOException, DuplicateUrlException, InvalidControllerPackageException {
-        frontController = controller;
 
         // Extract initialization parameters
         String packageName = controller.getInitParameter("package_name");
@@ -48,9 +47,6 @@ public class RequestHandler {
         // Create initialization parameter object
         InitParameter initParameter = new InitParameter(
                 errorParamName, packageName, errorRedirectionParamName, roleAttributeName);
-
-        // Store role attribute name for role checking
-        defaultRoleAttribute = initParameter.getRoleAttributeName();
 
         // Scan package for mappings
         HashMap<String, Mapping> urlMappings = (HashMap<String, Mapping>) PackageScanner.scanPackage(packageName);
