@@ -80,7 +80,7 @@ public class RequestHandler {
         String url = UrlParser.getRoute(request.getRequestURI());
 
         // Find mapping for URL
-        Mapping mapping = findMappingForUrl(url);
+        Mapping mapping = findMappingForUrl(controller, url);
         if (mapping == null) {
             throw new UrlNotFoundException("Oops, url not found!(" + url + ")");
         }
@@ -89,7 +89,7 @@ public class RequestHandler {
         VerbMethod verbMethod = mapping.getSpecificVerbMethod(verb);
 
         // Validate user role for access
-        validateUserRole(request, verbMethod);
+        validateUserRole(controller, request, verbMethod);
 
         // Validate method parameters
         validationExceptionHandler = Validator.validateMethod(verbMethod.getMethod(), request);
@@ -112,7 +112,7 @@ public class RequestHandler {
 
     private void validateUserRole(FrontController controller, HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
-        UserRoleUtils userRoleUtility = new UserRoleUtils(defaultRoleAttribute);
+        UserRoleUtils userRoleUtility = new UserRoleUtils(controller.getInitParameter().getRoleAttributeName());
         userRoleUtility.checkUserRole(request, verbMethod);
     }
 
@@ -122,6 +122,7 @@ public class RequestHandler {
             InstantiationException, NoSuchMethodException, SecurityException, AnnotationNotPresentException,
             InvalidRequestException, IOException, ServletException {
 
+        request.setAttribute(controller.getInitParameter().getErrorParamName(), validationExceptionHandler);
         if (validationExceptionHandler.containsException()) {
             request = RequestUtils.generateHttpServletRequest(request, "GET");
             return handleValidationException(controller, request, verbMethod, validationExceptionHandler);
