@@ -33,11 +33,6 @@ import mg.emberframework.utils.validation.Validator;
 public class RequestHandler {
     // Constants
     private static final String CONTENT_TYPE_JSON = "application/json";
-
-    // Static variables
-    private static FrontController frontController;
-    private static ModelValidationResults validationExceptionHandler = new ModelValidationResults();
-    private static String defaultRoleAttribute;
     private static final Gson gson = new Gson();
 
     public void init(FrontController controller)
@@ -72,6 +67,8 @@ public class RequestHandler {
             AnnotationNotPresentException, InvalidRequestException,
             UnauthorizedAccessException, URISyntaxException {
 
+        ModelValidationResults validationExceptionHandler;
+
         // Check for existing exceptions in controller
         if (controller.getException() != null) {
             ExceptionHandler.handleException(controller.getException(), response);
@@ -98,10 +95,7 @@ public class RequestHandler {
         validationExceptionHandler = Validator.validateMethod(verbMethod.getMethod(), request);
 
         // Process request and get result
-        Object result = processRequest(controller, request, mapping, verb, verbMethod);
-
-        // Prepare request with validation results
-        prepareRequest(controller, request);
+        Object result = processRequest(controller, request, mapping, verb, verbMethod, validationExceptionHandler);
 
         // Handle REST API responses
         if (verbMethod.isRestAPI()) {
@@ -130,7 +124,7 @@ public class RequestHandler {
 
         if (validationExceptionHandler.containsException()) {
             request = RequestUtils.generateHttpServletRequest(request, "GET");
-            return handleValidationException(controller, request, verbMethod);
+            return handleValidationException(controller, request, verbMethod, validationExceptionHandler);
         } else {
             return ReflectionUtils.executeRequestMethod(mapping, request, verb);
         }
