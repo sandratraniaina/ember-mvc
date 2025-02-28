@@ -1,4 +1,4 @@
-package mg.emberframework.manager;
+package mg.emberframework.core;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -11,14 +11,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mg.emberframework.controller.FrontController;
-import mg.emberframework.manager.data.InitParameter;
-import mg.emberframework.manager.data.ModelValidationResults;
-import mg.emberframework.manager.data.ModelView;
-import mg.emberframework.manager.data.VerbMethod;
-import mg.emberframework.manager.exception.*;
-import mg.emberframework.manager.handler.ExceptionHandler;
-import mg.emberframework.manager.handler.RedirectionHandler;
-import mg.emberframework.manager.url.Mapping;
+import mg.emberframework.core.data.InitParameter;
+import mg.emberframework.core.data.ModelValidationResults;
+import mg.emberframework.core.data.ModelView;
+import mg.emberframework.core.data.VerbMethod;
+import mg.emberframework.core.exception.*;
+import mg.emberframework.core.handler.ExceptionHandler;
+import mg.emberframework.core.handler.RedirectionHandler;
+import mg.emberframework.core.url.Mapping;
 import mg.emberframework.utils.http.RequestUtils;
 import mg.emberframework.utils.http.UrlParser;
 import mg.emberframework.utils.http.UserRoleUtils;

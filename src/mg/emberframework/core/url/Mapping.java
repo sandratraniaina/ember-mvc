@@ -1,11 +1,11 @@
-package mg.emberframework.manager.url;
+package mg.emberframework.core.url;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import mg.emberframework.manager.data.VerbMethod;
-import mg.emberframework.manager.exception.DuplicateUrlException;
-import mg.emberframework.manager.exception.InvalidRequestException;
+import mg.emberframework.core.data.VerbMethod;
+import mg.emberframework.core.exception.DuplicateUrlException;
+import mg.emberframework.core.exception.InvalidRequestException;
 
 public class Mapping {
     Class<?> clazz;

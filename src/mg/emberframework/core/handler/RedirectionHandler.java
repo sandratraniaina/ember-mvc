@@ -1,4 +1,4 @@
-package mg.emberframework.manager.handler;
+package mg.emberframework.core.handler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mg.emberframework.manager.data.ModelView;
+import mg.emberframework.core.data.ModelView;
 
 public class RedirectionHandler {
     private RedirectionHandler() {

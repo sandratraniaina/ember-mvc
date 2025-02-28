@@ -8,13 +8,12 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import mg.emberframework.manager.RequestHandler;
-import mg.emberframework.manager.data.InitParameter;
-import mg.emberframework.manager.exception.DuplicateUrlException;
-import mg.emberframework.manager.exception.InvalidControllerPackageException;
-import mg.emberframework.manager.handler.ExceptionHandler;
-import mg.emberframework.manager.url.Mapping;
+import mg.emberframework.core.RequestHandler;
+import mg.emberframework.core.data.InitParameter;
+import mg.emberframework.core.exception.DuplicateUrlException;
+import mg.emberframework.core.exception.InvalidControllerPackageException;
+import mg.emberframework.core.handler.ExceptionHandler;
+import mg.emberframework.core.url.Mapping;
 
 @MultipartConfig
 public class FrontController extends HttpServlet {

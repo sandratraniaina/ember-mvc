@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
-import mg.emberframework.manager.exception.ModelValidationException;
 import mg.emberframework.utils.reflection.ClassUtils;
 import mg.emberframework.utils.validation.validators.FieldValidator;
 import mg.emberframework.annotation.RequestParameter;
-import mg.emberframework.manager.data.FieldValidationResult;
-import mg.emberframework.manager.data.ModelValidationResults;
+import mg.emberframework.core.data.FieldValidationResult;
+import mg.emberframework.core.data.ModelValidationResults;
+import mg.emberframework.core.exception.ModelValidationException;
 
 public class Validator {
 

@@ -1,4 +1,4 @@
-package mg.emberframework.manager.data;
+package mg.emberframework.core.data;
 
 import java.util.ArrayList;
 import java.util.List;

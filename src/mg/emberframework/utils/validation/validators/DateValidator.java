@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import mg.emberframework.annotation.validation.DateType;
-import mg.emberframework.manager.exception.ModelValidationException;
+import mg.emberframework.core.exception.ModelValidationException;
 
 public class DateValidator implements FieldValidator {
 

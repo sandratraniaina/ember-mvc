@@ -11,10 +11,10 @@ import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.annotation.RequestParameter;
-import mg.emberframework.manager.data.Session;
-import mg.emberframework.manager.exception.AnnotationNotPresentException;
-import mg.emberframework.manager.exception.InvalidRequestException;
-import mg.emberframework.manager.url.Mapping;
+import mg.emberframework.core.data.Session;
+import mg.emberframework.core.exception.AnnotationNotPresentException;
+import mg.emberframework.core.exception.InvalidRequestException;
+import mg.emberframework.core.url.Mapping;
 import mg.emberframework.utils.conversion.ObjectConverter;
 
 public class ReflectionUtils {

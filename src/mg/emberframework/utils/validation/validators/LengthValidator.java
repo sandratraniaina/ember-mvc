@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import mg.emberframework.annotation.validation.Length;
-import mg.emberframework.manager.exception.ModelValidationException;
+import mg.emberframework.core.exception.ModelValidationException;
 
 public class LengthValidator implements FieldValidator {
 

@@ -6,8 +6,8 @@ import java.util.Arrays;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import mg.emberframework.annotation.RequiredRole;
-import mg.emberframework.manager.data.VerbMethod;
-import mg.emberframework.manager.exception.UnauthorizedAccessException;
+import mg.emberframework.core.data.VerbMethod;
+import mg.emberframework.core.exception.UnauthorizedAccessException;
 
 public class UserRoleUtils {
     private String defaultRoleAttribute;

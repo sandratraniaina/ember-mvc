@@ -1,4 +1,4 @@
-package mg.emberframework.manager.data;
+package mg.emberframework.core.data;
 
 public class InitParameter {
     private String errorParamName;

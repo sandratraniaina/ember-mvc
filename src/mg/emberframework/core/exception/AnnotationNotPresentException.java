@@ -1,4 +1,4 @@
-package mg.emberframework.manager.exception;
+package mg.emberframework.core.exception;
 
 public class AnnotationNotPresentException extends Exception{
     public AnnotationNotPresentException(String message) {

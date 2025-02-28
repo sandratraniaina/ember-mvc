@@ -1,4 +1,4 @@
-package mg.emberframework.manager.handler;
+package mg.emberframework.core.handler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,8 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jakarta.servlet.http.HttpServletResponse;
-import mg.emberframework.manager.exception.UnauthorizedAccessException;
-import mg.emberframework.manager.exception.UrlNotFoundException;
+import mg.emberframework.core.exception.UnauthorizedAccessException;
+import mg.emberframework.core.exception.UrlNotFoundException;
 
 public class ExceptionHandler {
     private static final Logger logger = Logger.getLogger(ExceptionHandler.class.getName());

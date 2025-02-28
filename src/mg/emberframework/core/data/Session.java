@@ -1,4 +1,4 @@
-package mg.emberframework.manager.data;
+package mg.emberframework.core.data;
 
 import jakarta.servlet.http.HttpSession;
 

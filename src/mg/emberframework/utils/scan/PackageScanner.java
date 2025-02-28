@@ -9,11 +9,11 @@ import java.util.Map;
 
 import mg.emberframework.annotation.Controller;
 import mg.emberframework.annotation.request.Url;
-import mg.emberframework.manager.data.RequestVerb;
-import mg.emberframework.manager.data.VerbMethod;
-import mg.emberframework.manager.exception.DuplicateUrlException;
-import mg.emberframework.manager.exception.InvalidControllerPackageException;
-import mg.emberframework.manager.url.Mapping;
+import mg.emberframework.core.data.RequestVerb;
+import mg.emberframework.core.data.VerbMethod;
+import mg.emberframework.core.exception.DuplicateUrlException;
+import mg.emberframework.core.exception.InvalidControllerPackageException;
+import mg.emberframework.core.url.Mapping;
 
 public class PackageScanner {
     private PackageScanner() {

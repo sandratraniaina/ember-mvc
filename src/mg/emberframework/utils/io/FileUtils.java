@@ -7,7 +7,7 @@ import java.io.InputStream;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
-import mg.emberframework.manager.data.File;
+import mg.emberframework.core.data.File;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

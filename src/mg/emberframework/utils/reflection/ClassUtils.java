@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mg.emberframework.manager.data.File;
-import mg.emberframework.manager.data.Session;
+import mg.emberframework.core.data.File;
+import mg.emberframework.core.data.Session;
 
 public class ClassUtils {
     private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>();
