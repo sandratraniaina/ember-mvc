@@ -9,6 +9,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.utils.reflection.ClassUtils;
+import mg.emberframework.utils.registry.ValidatorRegistry;
 import mg.emberframework.utils.validation.validators.FieldValidator;
 import mg.emberframework.annotation.http.RequestParameter;
 import mg.emberframework.core.data.FieldValidationResult;
