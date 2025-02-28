@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 
 import com.google.gson.Gson;
 
@@ -34,9 +33,6 @@ import mg.emberframework.utils.validation.Validator;
 public class MainProcess {
     // Constants
     private static final String CONTENT_TYPE_JSON = "application/json";
-
-    // Instance variables
-    private List<Exception> exceptions;
 
     // Static variables
     private static FrontController frontController;
@@ -183,14 +179,5 @@ public class MainProcess {
         } else {
             throw new IllegalReturnTypeException("Invalid return type");
         }
-    }
-
-    // Getters and setters
-    public List<Exception> getExceptions() {
-        return exceptions;
-    }
-
-    public void setExceptions(List<Exception> exceptions) {
-        this.exceptions = exceptions;
     }
 }
