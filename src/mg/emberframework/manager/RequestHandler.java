@@ -40,7 +40,7 @@ public class RequestHandler {
     private static String defaultRoleAttribute;
     private static final Gson gson = new Gson();
 
-    public static void init(FrontController controller)
+    public void init(FrontController controller)
             throws ClassNotFoundException, IOException, DuplicateUrlException, InvalidControllerPackageException {
         frontController = controller;
 
@@ -65,7 +65,7 @@ public class RequestHandler {
         FrontController.setInitParameter(initParameter);
     }
 
-    public static void handleRequest(FrontController controller, HttpServletRequest request,
+    public void handleRequest(FrontController controller, HttpServletRequest request,
             HttpServletResponse response) throws IOException, UrlNotFoundException,
             NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException, ServletException, IllegalReturnTypeException,
@@ -112,18 +112,18 @@ public class RequestHandler {
         sendResponse(result, request, response);
     }
 
-    private static Mapping findMappingForUrl(String url) {
-        return frontController.getUrlMapping().get(url);
+    private Mapping findMappingForUrl(FrontController controller, String url) {
+        return controller.getUrlMapping().get(url);
     }
 
-    private static void validateUserRole(HttpServletRequest request, VerbMethod verbMethod)
+    private void validateUserRole(FrontController controller, HttpServletRequest request, VerbMethod verbMethod)
             throws UnauthorizedAccessException {
         UserRoleUtils userRoleUtility = new UserRoleUtils(defaultRoleAttribute);
         userRoleUtility.checkUserRole(request, verbMethod);
     }
 
-    private static Object processRequest(FrontController controller, HttpServletRequest request,
-            Mapping mapping, String verb, VerbMethod verbMethod)
+    private Object processRequest(FrontController controller, HttpServletRequest request,
+            Mapping mapping, String verb, VerbMethod verbMethod, ModelValidationResults validationExceptionHandler)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             InstantiationException, NoSuchMethodException, SecurityException, AnnotationNotPresentException,
             InvalidRequestException, IOException, ServletException {
@@ -136,8 +136,8 @@ public class RequestHandler {
         }
     }
 
-    private static ModelView handleValidationException(FrontController controller,
-            HttpServletRequest request, VerbMethod verbMethod) {
+    private ModelView handleValidationException(FrontController controller,
+            HttpServletRequest request, VerbMethod verbMethod, ModelValidationResults validationExceptionHandler) {
         ModelView modelView = new ModelView();
         modelView.setRedirect(false);
         modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
@@ -149,17 +149,7 @@ public class RequestHandler {
         return modelView;
     }
 
-    private static void prepareRequest(FrontController controller, HttpServletRequest request) {
-        if (validationExceptionHandler == null) {
-            validationExceptionHandler = new ModelValidationResults();
-        }
-
-        if (request.getAttribute(controller.getInitParameter().getErrorParamName()) == null) {
-            request.setAttribute(controller.getInitParameter().getErrorParamName(), validationExceptionHandler);
-        }
-    }
-
-    private static String convertToJson(Object methodObject, HttpServletResponse response) {
+    private String convertToJson(Object methodObject, HttpServletResponse response) {
         String json;
         if (methodObject instanceof ModelView modelView) {
             json = gson.toJson(modelView.getData());
@@ -170,7 +160,7 @@ public class RequestHandler {
         return json;
     }
 
-    private static void sendResponse(Object result, HttpServletRequest request, HttpServletResponse response)
+    private void sendResponse(Object result, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException, IllegalReturnTypeException {
         if (result instanceof String) {
             response.getWriter().println(result.toString());
