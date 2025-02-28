@@ -22,11 +22,13 @@ public class FrontController extends HttpServlet {
     private static Exception exception = null;
     private static InitParameter initParameter;
 
+    private transient RequestHandler requestHandler;
+
     // Class methods
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            RequestHandler.handleRequest(this, request, response);
+            requestHandler.handleRequest(this, request, response);
         } catch (Exception e) {
             ExceptionHandler.handleException(e, response);
         }
@@ -64,7 +66,8 @@ public class FrontController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            RequestHandler.init(this);
+            requestHandler = new RequestHandler();
+            requestHandler.init(this);
         } catch (InvalidControllerPackageException | DuplicateUrlException e) {
             setException(e);
         } catch (Exception e) {
@@ -95,5 +98,13 @@ public class FrontController extends HttpServlet {
 
     public static void setInitParameter(InitParameter newInitParameter) {
         initParameter = newInitParameter;
+    }
+
+    public RequestHandler getRequestHandler() {
+        return requestHandler;
+    }
+
+    public void setRequestHandler(RequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
     }
 }
