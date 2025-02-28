@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 import jakarta.servlet.http.HttpServletRequest;
-import mg.emberframework.annotation.RestApi;
+import mg.emberframework.annotation.http.RestApi;
 
 public class VerbMethod {
     Method method;

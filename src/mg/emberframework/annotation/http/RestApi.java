@@ -1,4 +1,4 @@
-package mg.emberframework.annotation;
+package mg.emberframework.annotation.http;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

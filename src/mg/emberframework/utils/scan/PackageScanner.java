@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mg.emberframework.annotation.Controller;
+import mg.emberframework.annotation.http.Controller;
 import mg.emberframework.annotation.http.Url;
 import mg.emberframework.core.data.RequestVerb;
 import mg.emberframework.core.data.VerbMethod;

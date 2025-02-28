@@ -10,7 +10,7 @@ import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import mg.emberframework.annotation.RequestParameter;
+import mg.emberframework.annotation.http.RequestParameter;
 import mg.emberframework.core.data.Session;
 import mg.emberframework.core.exception.AnnotationNotPresentException;
 import mg.emberframework.core.exception.InvalidRequestException;

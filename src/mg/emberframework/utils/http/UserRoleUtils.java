@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import mg.emberframework.annotation.RequiredRole;
+import mg.emberframework.annotation.http.RequiredRole;
 import mg.emberframework.core.data.VerbMethod;
 import mg.emberframework.core.exception.UnauthorizedAccessException;
 
