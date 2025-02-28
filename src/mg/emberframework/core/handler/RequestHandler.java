@@ -1,4 +1,4 @@
-package mg.emberframework.core;
+package mg.emberframework.core.handler;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -10,14 +10,12 @@ import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mg.emberframework.controller.FrontController;
+import mg.emberframework.core.FrontController;
 import mg.emberframework.core.data.InitParameter;
 import mg.emberframework.core.data.ModelValidationResults;
 import mg.emberframework.core.data.ModelView;
 import mg.emberframework.core.data.VerbMethod;
 import mg.emberframework.core.exception.*;
-import mg.emberframework.core.handler.ExceptionHandler;
-import mg.emberframework.core.handler.RedirectionHandler;
 import mg.emberframework.core.url.Mapping;
 import mg.emberframework.utils.http.RequestUtils;
 import mg.emberframework.utils.http.UrlParser;

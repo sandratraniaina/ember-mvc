@@ -1,4 +1,4 @@
-package mg.emberframework.controller;
+package mg.emberframework.core;
 
 import java.io.IOException;
 import java.util.Map;
@@ -8,11 +8,11 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mg.emberframework.core.RequestHandler;
 import mg.emberframework.core.data.InitParameter;
 import mg.emberframework.core.exception.DuplicateUrlException;
 import mg.emberframework.core.exception.InvalidControllerPackageException;
 import mg.emberframework.core.handler.ExceptionHandler;
+import mg.emberframework.core.handler.RequestHandler;
 import mg.emberframework.core.url.Mapping;
 
 @MultipartConfig
