@@ -63,7 +63,7 @@ public class RequestHandler {
             AnnotationNotPresentException, InvalidRequestException,
             UnauthorizedAccessException, URISyntaxException {
 
-        ModelValidationResults validationExceptionHandler;
+        ModelValidationResults modelValidationResults;
 
         // Check for existing exceptions in controller
         if (controller.getException() != null) {
@@ -88,10 +88,10 @@ public class RequestHandler {
         validateUserRole(controller, request, verbMethod);
 
         // Validate method parameters
-        validationExceptionHandler = Validator.validateMethod(verbMethod.getMethod(), request);
+        modelValidationResults = Validator.validateMethod(verbMethod.getMethod(), request);
 
         // Process request and get result
-        Object result = processRequest(controller, request, mapping, verb, verbMethod, validationExceptionHandler);
+        Object result = processRequest(controller, request, mapping, verb, verbMethod, modelValidationResults);
 
         // Handle REST API responses
         if (verbMethod.isRestAPI()) {
@@ -113,28 +113,28 @@ public class RequestHandler {
     }
 
     private Object processRequest(FrontController controller, HttpServletRequest request,
-            Mapping mapping, String verb, VerbMethod verbMethod, ModelValidationResults validationExceptionHandler)
+            Mapping mapping, String verb, VerbMethod verbMethod, ModelValidationResults modelValidationResults)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             InstantiationException, NoSuchMethodException, SecurityException, AnnotationNotPresentException,
             InvalidRequestException, IOException, ServletException {
 
-        request.setAttribute(controller.getInitParameter().getErrorParamName(), validationExceptionHandler);
-        if (validationExceptionHandler.containsException()) {
+        request.setAttribute(controller.getInitParameter().getErrorParamName(), modelValidationResults);
+        if (modelValidationResults.containsException()) {
             request = RequestUtils.generateHttpServletRequest(request, "GET");
-            return handleValidationException(controller, request, verbMethod, validationExceptionHandler);
+            return handleValidationException(controller, request, verbMethod, modelValidationResults);
         } else {
             return ReflectionUtils.executeRequestMethod(mapping, request, verb);
         }
     }
 
     private ModelView handleValidationException(FrontController controller,
-            HttpServletRequest request, VerbMethod verbMethod, ModelValidationResults validationExceptionHandler) {
+            HttpServletRequest request, VerbMethod verbMethod, ModelValidationResults modelValidationResults) {
         ModelView modelView = new ModelView();
         modelView.setRedirect(false);
         modelView.setUrl(request.getParameter(controller.getInitParameter().getErrorRedirectionParamName()));
 
         if (verbMethod.isRestAPI()) {
-            modelView.addObject(controller.getInitParameter().getErrorParamName(), validationExceptionHandler);
+            modelView.addObject(controller.getInitParameter().getErrorParamName(), modelValidationResults);
         }
 
         return modelView;
