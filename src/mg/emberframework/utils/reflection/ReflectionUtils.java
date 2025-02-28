@@ -47,7 +47,7 @@ public class ReflectionUtils {
             throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException, InstantiationException,
             AnnotationNotPresentException, InvalidRequestException, IOException, ServletException {
-        List<Object> objects = new ArrayList<>();
+        List<Object> methodParameters = new ArrayList<>();
 
         Class<?> objClass = mapping.getClazz();
         Object requestObject = objClass.getConstructor().newInstance();
@@ -65,10 +65,10 @@ public class ReflectionUtils {
 
             object = ObjectUtils.getParameterInstance(request, parameter, clazz, object);
 
-            objects.add(object);
+            methodParameters.add(object);
         }
 
-        return executeMethod(requestObject, method.getName(), objects.toArray());
+        return executeMethod(requestObject, method.getName(), methodParameters.toArray());
     }
 
     public static Object executeMethod(Object object, String methodName, Object... args) throws NoSuchMethodException,
