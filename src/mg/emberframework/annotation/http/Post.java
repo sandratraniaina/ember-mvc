@@ -1,4 +1,4 @@
-package mg.emberframework.annotation.request;
+package mg.emberframework.annotation.http;
 
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -7,6 +7,5 @@ import java.lang.annotation.Retention;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Url {
-    String value();
+public @interface Post {
 }

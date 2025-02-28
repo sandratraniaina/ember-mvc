@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import mg.emberframework.annotation.Controller;
-import mg.emberframework.annotation.request.Url;
+import mg.emberframework.annotation.http.Url;
 import mg.emberframework.core.data.RequestVerb;
 import mg.emberframework.core.data.VerbMethod;
 import mg.emberframework.core.exception.DuplicateUrlException;
