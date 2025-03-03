@@ -27,7 +27,7 @@ public class Validator {
             FieldValidator validator = ValidatorRegistry.getValidator(annotation.annotationType());
 
             if (validator != null) {
-                validator.validate(value , annotation, field);
+                validator.validate(value , annotation, field.getName());
             }
         }
     }
@@ -43,7 +43,7 @@ public class Validator {
 
             if (validator != null) {
                 try {
-                    validator.validate(value , annotation, field);
+                    validator.validate(value , annotation, field.getName());
                 } catch (Exception e) {
                     fieldExceptions.addException(e);
                 }
