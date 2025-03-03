@@ -31,10 +31,19 @@ public class PackageScanner {
                 Controller.class);
         for (Class<?> clazz : classes) {
             List<Method> classMethods = PackageUtils.getClassMethodsWithAnnotation(clazz, Url.class);
-
+            Url urlAnnotation = clazz.getAnnotation(Url.class);
+            String classUrlMapping = null;
+            if (urlAnnotation != null) {
+                classUrlMapping = urlAnnotation.value();
+            }
+            
             for (Method method : classMethods) {
                 Url methodAnnotation = method.getAnnotation(Url.class);
                 String url = methodAnnotation.value();
+
+                if (classUrlMapping != null && !classUrlMapping.isEmpty()) {
+                    url = classUrlMapping + url;
+                }
                 
                 VerbMethod verbMethod = new VerbMethod(method, RequestVerb.getMethodVerb(method));
 
