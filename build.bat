@@ -19,7 +19,7 @@ for /R "%SRC_DIR%" %%f in (*.java) do (
 
 :: Compile the code
 cd "%TMP_DIR%"
-javac -d "%BIN_DIR%" -cp "%LIB_DIR%/*" "*.java" --parameter
+javac -d "%BIN_DIR%" -cp "%LIB_DIR%/*" "*.java" -parameters
 
 :: Create the jar
 cd "%BIN_DIR%"
