@@ -17,6 +17,17 @@ public class ObjectUtils {
     private ObjectUtils() {
     }
 
+    public static String getParamStringValue(Parameter parameter,  HttpServletRequest request) {
+        String value = null;
+        if (parameter.isAnnotationPresent(RequestParameter.class)) {
+            value = request.getParameter(parameter.getAnnotation(RequestParameter.class).value());
+        } else {
+            value = request.getParameter(parameter.getName());
+        }
+
+        return value;
+    }
+
     public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
             Object object)
             throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
@@ -27,17 +38,12 @@ public class ObjectUtils {
         String annotationValue = annotatedType != null ? annotatedType.value() : "";
 
         if (ClassUtils.isPrimitive(clazz)) {
+            strValue = getParamStringValue(parameter, request);
 
-            if (parameter.isAnnotationPresent(RequestParameter.class)) {
-                strValue = request.getParameter(annotationValue);
-                object = strValue != null ? ObjectConverter.castObject(strValue, clazz) : object;
-            } else {
-                String paramName = parameter.getName();
-                strValue = request.getParameter(paramName);
-                if (strValue != null) {
-                    object = ObjectConverter.castObject(strValue, clazz);
-                }
+            if (strValue != null) {
+                object = ObjectConverter.castObject(strValue, clazz);
             }
+            
         } else if (clazz.equals(Session.class)) {
             object = new Session(request.getSession());
         } else if (clazz.equals(File.class)) {

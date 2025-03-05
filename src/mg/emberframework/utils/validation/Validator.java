@@ -9,25 +9,27 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import mg.emberframework.utils.reflection.ClassUtils;
+import mg.emberframework.utils.reflection.ObjectUtils;
 import mg.emberframework.utils.registry.ValidatorRegistry;
 import mg.emberframework.utils.validation.validators.FieldValidator;
 import mg.emberframework.annotation.http.RequestParameter;
 import mg.emberframework.core.data.FieldValidationResult;
 import mg.emberframework.core.data.ModelValidationResults;
-import mg.emberframework.core.exception.ModelValidationException;
 
 public class Validator {
 
     private Validator() {}
     
-    public static void checkField(String value, Field field) throws ModelValidationException {
-        Annotation[] annotations = field.getAnnotations();
-
+    public static void checkField(String value, Annotation[] annotations, String fieldName, ModelValidationResults results) {
         for(Annotation annotation : annotations) {
             FieldValidator validator = ValidatorRegistry.getValidator(annotation.annotationType());
 
             if (validator != null) {
-                validator.validate(value , annotation, field);
+                try {
+                    validator.validate(value , annotation, fieldName);
+                } catch (Exception e) {
+                    results.addException(fieldName, e);
+                }
             }
         }
     }
@@ -43,7 +45,7 @@ public class Validator {
 
             if (validator != null) {
                 try {
-                    validator.validate(value , annotation, field);
+                    validator.validate(value , annotation, field.getName());
                 } catch (Exception e) {
                     fieldExceptions.addException(e);
                 }
@@ -72,6 +74,10 @@ public class Validator {
             if (ClassUtils.isClassModel(parameter.getType())) {
                 String identifier = parameter.getAnnotation(RequestParameter.class).value();
                 validateModel(parameter.getType() , identifier, handler, request);
+            } else if (ClassUtils.isPrimitive(parameter.getType())) {
+                String value = ObjectUtils.getParamStringValue(parameter, request);
+                String paramName = parameter.getAnnotation(RequestParameter.class).value();
+                checkField(value, parameter.getAnnotations(), paramName, handler);
             }
         }
 

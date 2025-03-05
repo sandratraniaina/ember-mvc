@@ -6,6 +6,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ ElementType.FIELD, ElementType.PARAMETER })
 public @interface Required {
 }

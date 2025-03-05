@@ -68,7 +68,7 @@ public class ReflectionUtils {
             methodParameters.add(object);
         }
 
-        return executeMethod(requestObject, method.getName(), methodParameters.toArray());
+        return method.invoke(requestObject, methodParameters.toArray());
     }
 
     public static Object executeMethod(Object object, String methodName, Object... args) throws NoSuchMethodException,
