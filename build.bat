@@ -23,7 +23,7 @@ javac -d "%BIN_DIR%" -cp "%LIB_DIR%/*" "*.java" -parameters
 
 :: Create the jar
 cd "%BIN_DIR%"
-jar cvf "ember_mvc.jar" * -C "%LIB_DIR%" .
+jar cvf "ember_mvc.jar" * -C "%LIB_DIR%" . -C "%SRC_DIR%" .
 move "ember_mvc.jar" "%PROJECT_DIR%"
 
 :: Clean up tmp directory
