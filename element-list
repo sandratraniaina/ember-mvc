@@ -1,0 +1,16 @@
+mg.emberframework.annotation.http
+mg.emberframework.annotation.validation
+mg.emberframework.core
+mg.emberframework.core.data
+mg.emberframework.core.exception
+mg.emberframework.core.handler
+mg.emberframework.core.url
+mg.emberframework.utils.conversion
+mg.emberframework.utils.http
+mg.emberframework.utils.io
+mg.emberframework.utils.reflection
+mg.emberframework.utils.registry
+mg.emberframework.utils.scan
+mg.emberframework.utils.string
+mg.emberframework.utils.validation
+mg.emberframework.utils.validation.validators
