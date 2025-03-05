@@ -88,6 +88,10 @@ public class RequestHandler {
         // Validate method parameters
         modelValidationResults = Validator.validateMethod(verbMethod.getMethod(), request);
 
+        if (modelValidationResults.containsException()) {
+            request = RequestUtils.generateHttpServletRequest(request, "GET");
+        }
+
         // Process request and get result
         Object result = processRequest(controller, request, mapping, verb, verbMethod, modelValidationResults);
 
@@ -116,9 +120,13 @@ public class RequestHandler {
             InstantiationException, NoSuchMethodException, SecurityException, AnnotationNotPresentException,
             InvalidRequestException, IOException, ServletException {
 
-        request.setAttribute(controller.getInitParameter().getErrorParamName(), modelValidationResults);
+        ModelValidationResults temp = ((ModelValidationResults) request.getAttribute(controller.getInitParameter().getErrorParamName()));
+
+        if (temp == null || !temp.containsException()) {
+            request.setAttribute(controller.getInitParameter().getErrorParamName(), modelValidationResults);
+        }
+
         if (modelValidationResults.containsException()) {
-            request = RequestUtils.generateHttpServletRequest(request, "GET");
             return handleValidationException(controller, request, verbMethod, modelValidationResults);
         } else {
             return ReflectionUtils.executeRequestMethod(mapping, request, verb);
