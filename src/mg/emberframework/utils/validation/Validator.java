@@ -76,7 +76,8 @@ public class Validator {
                 validateModel(parameter.getType() , identifier, handler, request);
             } else if (ClassUtils.isPrimitive(parameter.getType())) {
                 String value = ObjectUtils.getParamStringValue(parameter, request);
-                checkField(value, parameter.getAnnotations(), parameter.getName(), handler);
+                String paramName = parameter.getAnnotation(RequestParameter.class).value();
+                checkField(value, parameter.getAnnotations(), paramName, handler);
             }
         }
 
