@@ -67,7 +67,7 @@ public class RequestHandler {
 
         // Check for existing exceptions in controller
         if (controller.getException() != null) {
-            ExceptionHandler.handleException(controller.getException(), response);
+            ExceptionHandler.handleException(controller.getException(), request, response);
             return;
         }
 

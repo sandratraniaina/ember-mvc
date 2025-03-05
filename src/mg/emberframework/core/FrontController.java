@@ -30,7 +30,7 @@ public class FrontController extends HttpServlet {
         try {
             requestHandler.handleRequest(this, request, response);
         } catch (Exception e) {
-            ExceptionHandler.handleException(e, response);
+            ExceptionHandler.handleException(e, request, response);
         }
     }
 
@@ -41,11 +41,11 @@ public class FrontController extends HttpServlet {
             processRequest(req, resp);
         } catch (ServletException e) {
             ExceptionHandler.handleException(
-                    new ServletException("A servlet error has occured while executing doGet method", e.getCause()),
+                    new ServletException("A servlet error has occured while executing doGet method", e.getCause()),req, 
                     resp);
         } catch (IOException e) {
             ExceptionHandler.handleException(
-                    new IOException("An IO error has occured while executing doGet method", e.getCause()), resp);
+                    new IOException("An IO error has occured while executing doGet method", e.getCause()), req, resp);
         }
     }
 
@@ -55,11 +55,11 @@ public class FrontController extends HttpServlet {
             processRequest(req, resp);
         } catch (ServletException e) {
             ExceptionHandler.handleException(
-                    new ServletException("A servlet error has occured while executing doPost method", e.getCause()),
+                    new ServletException("A servlet error has occured while executing doPost method", e.getCause()), req,
                     resp);
         } catch (IOException e) {
             ExceptionHandler.handleException(
-                    new IOException("An IO error has occured while executing doPost method", e.getCause()), resp);
+                    new IOException("An IO error has occured while executing doPost method", e.getCause()), req, resp);
         }
     }
 
