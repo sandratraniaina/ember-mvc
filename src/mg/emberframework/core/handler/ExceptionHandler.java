@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jakarta.servlet.http.HttpServletResponse;
+import mg.emberframework.core.FrontController;
 import mg.emberframework.core.exception.UnauthorizedAccessException;
 import mg.emberframework.core.exception.UrlNotFoundException;
 
@@ -70,7 +71,7 @@ public class ExceptionHandler {
         }
     }
 
-    public static void handleException(Exception e, HttpServletResponse response) {
+    public static void handleException(Exception e, HttpServletResponse response, FrontController controller) {
         try {
             if (!response.isCommitted()) {
                 int errorCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
@@ -86,9 +87,9 @@ public class ExceptionHandler {
         }
     }
 
-    public static void handleExceptions(List<Exception> exceptions, HttpServletResponse response) {
+    public static void handleExceptions(List<Exception> exceptions, HttpServletResponse response, FrontController controller) {
         for (Exception e : exceptions) {
-            handleException(e, response);
+            handleException(e, response, controller);
         }
     }
 }
