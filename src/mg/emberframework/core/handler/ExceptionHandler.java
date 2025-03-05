@@ -13,12 +13,31 @@ import mg.emberframework.core.FrontController;
 import mg.emberframework.core.exception.UnauthorizedAccessException;
 import mg.emberframework.core.exception.UrlNotFoundException;
 
+/**
+ * Handles exceptions and generates error responses in the Ember Framework.
+ * <p>
+ * This utility class provides methods to process exceptions, either by rendering
+ * a default HTML error page or forwarding to a custom error page.
+ * 
+ * @author Sandratra NIAINA
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class ExceptionHandler {
+    /** Logger for recording exceptions. */
     private static final Logger logger = Logger.getLogger(ExceptionHandler.class.getName());
     
+    /** Private constructor to prevent instantiation. */
     private ExceptionHandler() {
     }
 
+    /**
+     * Processes an error by generating a default HTML error page.
+     * @param response the HTTP response
+     * @param statusCode the HTTP status code
+     * @param exception the exception to process
+     * @throws IOException if an I/O error occurs while writing the response
+     */
     public static void processError(HttpServletResponse response, int statusCode, Exception exception) throws IOException {
         String errorName = getErrorName(statusCode);
 
@@ -60,6 +79,16 @@ public class ExceptionHandler {
         }
     }
 
+    /**
+     * Processes an error by forwarding to a custom error page.
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param statusCode the HTTP status code
+     * @param exception the exception to process
+     * @param page the custom error page URL
+     * @throws ServletException if a servlet error occurs during forwarding
+     * @throws IOException if an I/O error occurs
+     */
     public static void processCustomError(HttpServletRequest request, HttpServletResponse response, int statusCode, Exception exception, String page) throws ServletException, IOException {
         request.setAttribute("exception", exception);
         request.setAttribute("status-code", statusCode);
@@ -68,6 +97,11 @@ public class ExceptionHandler {
         request.getRequestDispatcher(page).forward(request, response);
     }
 
+    /**
+     * Determines the error name based on the status code.
+     * @param statusCode the HTTP status code
+     * @return the corresponding error name
+     */
     private static String getErrorName(Integer statusCode) {
         if (statusCode == null)
             return "Unknown Error";
@@ -81,6 +115,13 @@ public class ExceptionHandler {
         }
     }
 
+    /**
+     * Handles a single exception and generates an appropriate response.
+     * @param e the exception to handle
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     */
     public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             if (!response.isCommitted()) {
@@ -101,6 +142,13 @@ public class ExceptionHandler {
         }
     }
 
+    /**
+     * Handles a list of exceptions and processes each one.
+     * @param exceptions the list of exceptions to handle
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @throws ServletException if a servlet error occurs
+     */
     public static void handleExceptions(List<Exception> exceptions, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         for (Exception e : exceptions) {
             handleException(e, request, response);
