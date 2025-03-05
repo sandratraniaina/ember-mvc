@@ -41,6 +41,7 @@ public class RequestHandler {
         String errorParamName = controller.getInitParameter("error_param_name");
         String errorRedirectionParamName = controller.getInitParameter("error_redirection_param_name");
         String roleAttributeName = controller.getInitParameter("role_attribute_name");
+        String customErrorPage = controller.getInitParameter("custom_error_page");
 
         // Create initialization parameter object
         InitParameter initParameter = new InitParameter(
@@ -52,6 +53,7 @@ public class RequestHandler {
         // Set mappings and parameters in FrontController
         FrontController.setUrlMapping(urlMappings);
         FrontController.setInitParameter(initParameter);
+        FrontController.setCustomErrorPage(customErrorPage);
     }
 
     public void handleRequest(FrontController controller, HttpServletRequest request,
@@ -65,7 +67,7 @@ public class RequestHandler {
 
         // Check for existing exceptions in controller
         if (controller.getException() != null) {
-            ExceptionHandler.handleException(controller.getException(), response);
+            ExceptionHandler.handleException(controller.getException(), request, response);
             return;
         }
 

@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mg.emberframework.core.FrontController;
 import mg.emberframework.core.exception.UnauthorizedAccessException;
 import mg.emberframework.core.exception.UrlNotFoundException;
 
@@ -57,6 +60,14 @@ public class ExceptionHandler {
         }
     }
 
+    public static void processCustomError(HttpServletRequest request, HttpServletResponse response, int statusCode, Exception exception, String page) throws ServletException, IOException {
+        request.setAttribute("exception", exception);
+        request.setAttribute("status-code", statusCode);
+        request.setAttribute("message", exception.getMessage());
+
+        request.getRequestDispatcher(page).forward(request, response);
+    }
+
     private static String getErrorName(Integer statusCode) {
         if (statusCode == null)
             return "Unknown Error";
@@ -70,7 +81,7 @@ public class ExceptionHandler {
         }
     }
 
-    public static void handleException(Exception e, HttpServletResponse response) {
+    public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             if (!response.isCommitted()) {
                 int errorCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
@@ -79,16 +90,20 @@ public class ExceptionHandler {
                 } else if (e instanceof UnauthorizedAccessException) {
                     errorCode = HttpServletResponse.SC_UNAUTHORIZED;
                 }
-                processError(response, errorCode, e);
+                if (FrontController.getCustomErrorPage() != null) {
+                    processCustomError(request, response, errorCode, e, FrontController.getCustomErrorPage());
+                } else {
+                    processError(response, errorCode, e);
+                }
             }
         } catch (IOException exc) {
             logger.log(Level.SEVERE, exc.getMessage());
         }
     }
 
-    public static void handleExceptions(List<Exception> exceptions, HttpServletResponse response) {
+    public static void handleExceptions(List<Exception> exceptions, HttpServletRequest request, HttpServletResponse response) throws ServletException {
         for (Exception e : exceptions) {
-            handleException(e, response);
+            handleException(e, request, response);
         }
     }
 }
