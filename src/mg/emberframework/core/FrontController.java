@@ -20,6 +20,7 @@ public class FrontController extends HttpServlet {
     private static Map<String, Mapping> urlMappings;
     private static Exception exception = null;
     private static InitParameter initParameter;
+    private  static String customErrorPage;
 
     private transient RequestHandler requestHandler;
 
@@ -105,5 +106,13 @@ public class FrontController extends HttpServlet {
 
     public void setRequestHandler(RequestHandler requestHandler) {
         this.requestHandler = requestHandler;
+    }
+
+    public static String getCustomErrorPage() {
+        return customErrorPage;
+    }
+
+    public static void setCustomErrorPage(String customErrorPage) {
+        FrontController.customErrorPage = customErrorPage;
     }
 }
