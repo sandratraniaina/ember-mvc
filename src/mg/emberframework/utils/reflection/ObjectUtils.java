@@ -40,7 +40,7 @@ public class ObjectUtils {
         if (ClassUtils.isPrimitive(clazz)) {
             strValue = getParamStringValue(parameter, request);
 
-            if (strValue != null) {
+            if (strValue != null && !strValue.isEmpty()) {
                 object = ObjectConverter.castObject(strValue, clazz);
             }
             
