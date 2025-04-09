@@ -3,16 +3,18 @@ package mg.emberframework.utils.conversion;
 import java.lang.reflect.Constructor;
 
 import mg.emberframework.utils.registry.ConverterRegistry;
+import mg.emberframework.utils.registry.TypeRegistry;
 
 public class ObjectConverter {
     private static final ConverterRegistry registry = new ConverterRegistry();
+    private static final TypeRegistry typeRegistry = new TypeRegistry();
 
     private ObjectConverter() {
     }
 
-    public static <T> T castObject(String value, Class<T> clazz) {
-        if (value == null) {
-            return null;
+    public static <T> Object castObject(String value, Class<T> clazz) {
+        if (value == null || value.isEmpty()) {
+            return typeRegistry.getDefaultValue(clazz);
         }
 
         // Get converter from registry
