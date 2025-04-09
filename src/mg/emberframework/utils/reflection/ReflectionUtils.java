@@ -57,13 +57,12 @@ public class ReflectionUtils {
 
         for (Parameter parameter : method.getParameters()) {
             Class<?> clazz = parameter.getType();
-            Object object = ClassUtils.getDefaultValue(clazz);
             if (!parameter.isAnnotationPresent(RequestParameter.class) && !clazz.equals(Session.class)) {
                 throw new AnnotationNotPresentException(
                         "One of you parameter require `@RequestParameter` annotation");
             }
 
-            object = ObjectUtils.getParameterInstance(request, parameter, clazz, object);
+            Object object = ObjectUtils.getParameterInstance(request, parameter, clazz);
 
             methodParameters.add(object);
         }

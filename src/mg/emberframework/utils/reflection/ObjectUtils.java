@@ -17,7 +17,7 @@ public class ObjectUtils {
     private ObjectUtils() {
     }
 
-    public static String getParamStringValue(Parameter parameter,  HttpServletRequest request) {
+    public static String getParamStringValue(Parameter parameter, HttpServletRequest request) {
         String value = null;
         if (parameter.isAnnotationPresent(RequestParameter.class)) {
             value = request.getParameter(parameter.getAnnotation(RequestParameter.class).value());
@@ -28,10 +28,10 @@ public class ObjectUtils {
         return value;
     }
 
-    public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz,
-            Object object)
+    public static Object getParameterInstance(HttpServletRequest request, Parameter parameter, Class<?> clazz)
             throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
             IOException, ServletException, IllegalArgumentException, SecurityException {
+        Object result;
         String strValue;
 
         RequestParameter annotatedType = parameter.getAnnotation(RequestParameter.class);
@@ -40,18 +40,16 @@ public class ObjectUtils {
         if (ClassUtils.isPrimitive(clazz)) {
             strValue = getParamStringValue(parameter, request);
 
-            if (strValue != null && !strValue.isEmpty()) {
-                object = ObjectConverter.castObject(strValue, clazz);
-            }
-            
+            result = ObjectConverter.castObject(strValue, clazz);
+
         } else if (clazz.equals(Session.class)) {
-            object = new Session(request.getSession());
+            result = new Session(request.getSession());
         } else if (clazz.equals(File.class)) {
-            object = FileUtils.createRequestFile(annotationValue, request);
+            result = FileUtils.createRequestFile(annotationValue, request);
         } else {
-            object = ObjectUtils.getObjectInstance(clazz, annotationValue, request);
+            result = ObjectUtils.getObjectInstance(clazz, annotationValue, request);
         }
-        return object;
+        return result;
     }
 
     public static Object getObjectInstance(Class<?> classType, String annotationValue, HttpServletRequest request)
