@@ -7,7 +7,7 @@ set SRC_DIR=%PROJECT_DIR%src
 set BIN_DIR=%PROJECT_DIR%bin
 set LIB_DIR=%PROJECT_DIR%lib
 set TMP_DIR=%PROJECT_DIR%tmp
-set PROJECT_NAME="ember-mvc-1.0.0.jar"
+set PROJECT_NAME="ember-mvc-1.0.1.jar"
 
 :: Create bin and tmp directories if they don't exist
 if not exist "%BIN_DIR%" mkdir "%BIN_DIR%"
