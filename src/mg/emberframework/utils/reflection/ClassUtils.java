@@ -1,6 +1,7 @@
 package mg.emberframework.utils.reflection;
 
 import java.lang.reflect.Field;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class ClassUtils {
                 clazz == Integer.class ||
                 clazz == Long.class ||
                 clazz == Float.class ||
+                clazz == Date.class ||
                 clazz == Double.class;
     }
 

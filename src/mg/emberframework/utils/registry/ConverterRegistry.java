@@ -3,6 +3,7 @@ package mg.emberframework.utils.registry;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ public class ConverterRegistry {
         converters.put(Date.class, s -> Date.valueOf(LocalDate.parse(s)));
         converters.put(LocalDate.class, LocalDate::parse);
         converters.put(LocalDateTime.class, LocalDateTime::parse);
+        converters.put(Timestamp.class, s -> Timestamp.valueOf(LocalDateTime.parse(s)));
         
         // UUID
         converters.put(UUID.class, UUID::fromString);
