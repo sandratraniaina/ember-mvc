@@ -8,7 +8,8 @@ public class NumericValidator implements FieldValidator{
 
     @Override
     public void validate(String value, Annotation annotation, String fieldName) throws ModelValidationException {
-        if (!(value.matches("\\d+"))) {
+        String regex = "-?\\d+(\\.\\d+)?";
+        if (!(value.matches(regex))) {
             throw new ModelValidationException(fieldName + " should be numeric");
         }
     }
